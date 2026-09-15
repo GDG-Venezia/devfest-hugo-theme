@@ -88,39 +88,124 @@ function initAgenda() {
     });
   });
 
+  const selectFilter = (button) => {
+    activeFilter = button.dataset.trackFilter;
+    filterBar.querySelectorAll("[data-track-filter]").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b === button));
+    });
+    applyFilter();
+  };
+
   filterBar?.querySelectorAll("[data-track-filter]").forEach((button) => {
     button.addEventListener("click", () => {
-      activeFilter = button.dataset.trackFilter;
-      filterBar.querySelectorAll("[data-track-filter]").forEach((b) => {
-        b.setAttribute("aria-pressed", String(b === button));
-      });
-      applyFilter();
+      selectFilter(button);
+      const url = new URL(location.href);
+      if (activeFilter === "All") url.searchParams.delete("track");
+      else url.searchParams.set("track", activeFilter);
+      history.replaceState(null, "", url);
     });
   });
+
+  const requested = new URLSearchParams(location.search).get("track");
+  if (filterBar && requested) {
+    const button = [...filterBar.querySelectorAll("[data-track-filter]")].find((b) => b.dataset.trackFilter === requested);
+    if (button) selectFilter(button);
+  }
 
   renderSaved();
 }
 
-function initLiveBar() {
-  const bar = document.querySelector("[data-live-bar]");
-  const source = document.getElementById("live-schedule");
-  if (!bar || !source) return;
+// The page clock. `?now=2025-10-11T10:00` previews the live features at any moment.
+function currentTime() {
+  const override = new URLSearchParams(location.search).get("now");
+  const date = override ? new Date(override) : new Date();
+  return Number.isNaN(date.getTime()) ? new Date() : date;
+}
 
-  let schedule;
+function readSchedule() {
+  const source = document.getElementById("live-schedule");
+  if (!source) return null;
   try {
-    schedule = JSON.parse(source.textContent).map((s) => ({ ...s, start: new Date(s.start), end: new Date(s.end) }));
+    return JSON.parse(source.textContent).map((s) => ({ ...s, start: new Date(s.start), end: new Date(s.end) }));
   } catch {
-    return;
+    return null;
   }
+}
+
+function sessionCard(session) {
+  const card = document.createElement(session.url ? "a" : "div");
+  card.className = "live-card";
+  if (session.url) card.href = session.url;
+  card.style.setProperty("--accent", `var(--df-${session.color || "ink"})`);
+
+  const meta = document.createElement("span");
+  meta.className = "live-card__meta";
+  meta.textContent = [`${session.time} — ${session.endTime}`, session.room].filter(Boolean).join(" · ");
+  const title = document.createElement("span");
+  title.className = "live-card__title";
+  title.textContent = session.title;
+  card.append(meta, title);
+
+  if (session.speakers) {
+    const speakers = document.createElement("span");
+    speakers.className = "live-card__speakers";
+    speakers.textContent = session.speakers;
+    card.append(speakers);
+  }
+  return card;
+}
+
+function initLive() {
+  const schedule = readSchedule();
+  if (!schedule || schedule.length === 0) return;
+
+  const bar = document.querySelector("[data-live-bar]");
+  const nowNext = document.querySelector("[data-now-next]");
+  const trackCards = document.querySelector("[data-track-cards]");
+  const firstStart = Math.min(...schedule.map((s) => s.start.getTime()));
+  const lastEnd = Math.max(...schedule.map((s) => s.end.getTime()));
 
   const update = () => {
-    const now = new Date();
+    const now = currentTime();
     const live = schedule.filter((s) => s.start <= now && now < s.end);
-    bar.hidden = live.length === 0;
-    if (live.length) {
-      bar.querySelector("[data-live-title]").textContent = live
-        .map((s) => (s.room ? `${s.title} — ${s.room}` : s.title))
-        .join(" · ");
+
+    if (bar) {
+      bar.hidden = live.length === 0;
+      if (live.length) {
+        const [only] = live;
+        bar.querySelector("[data-live-title]").textContent =
+          live.length === 1 ? [only.title, only.room].filter(Boolean).join(" — ") : `${live.length} sessions in progress`;
+        if (nowNext) bar.href = "#program";
+      }
+    }
+
+    if (!nowNext) return;
+    // "Now & next" takes over from an hour before doors open until the last session ends.
+    const during = now.getTime() >= firstStart - 60 * 60 * 1000 && now.getTime() < lastEnd;
+    nowNext.hidden = !during;
+    if (trackCards) trackCards.hidden = during;
+    if (!during) return;
+
+    const upcoming = schedule.filter((s) => s.start > now);
+    const firstStartOf = (list) => (list.length ? Math.min(...list.map((s) => s.start.getTime())) : null);
+    const nextStart = firstStartOf(upcoming);
+    let next = upcoming.filter((s) => s.start.getTime() === nextStart);
+    // When the next slot is only a break, also show the talks that follow it.
+    if (next.length && next.every((s) => s.service)) {
+      const talks = upcoming.filter((s) => !s.service);
+      const talksStart = firstStartOf(talks);
+      next = next.concat(talks.filter((s) => s.start.getTime() === talksStart));
+    }
+
+    const nowList = nowNext.querySelector("[data-now-list]");
+    nowList.closest("div:not([data-now-list])").hidden = live.length === 0;
+    nowList.replaceChildren(...live.map(sessionCard));
+
+    const nextBlock = nowNext.querySelector("[data-next-block]");
+    nextBlock.hidden = next.length === 0;
+    if (next.length) {
+      nowNext.querySelector("[data-next-time]").textContent = next[0].time;
+      nowNext.querySelector("[data-next-list]").replaceChildren(...next.map(sessionCard));
     }
   };
   update();
@@ -129,4 +214,4 @@ function initLiveBar() {
 
 initMenu();
 initAgenda();
-initLiveBar();
+initLive();

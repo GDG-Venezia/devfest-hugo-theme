@@ -67,6 +67,13 @@ Every block with `enable: false` (or a missing file) is simply not rendered.
 
 Colours are one of `blue`, `red`, `yellow`, `green`, `ink`.
 
+### Live features
+
+On the event day the home page shows a "Live now" bar and replaces the track cards in the Program
+section with "Now & next" (from an hour before the first session until the last one ends). It runs on
+the visitor's clock. Preview it at any time with `?now=`, e.g. `/?now=2026-10-24T11:00:00%2B02:00`.
+The agenda accepts `?track=<name>` to open with a track selected.
+
 ### `sessions.yml`
 
 ```yaml

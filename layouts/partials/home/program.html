@@ -1,18 +1,67 @@
 {{ $sessions := partial "functions/sessions.html" .page }}
+{{ $talks := where $sessions "service" "!=" true }}
 <section class="section section--ink" id="program">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Program" "link" (cond (gt (len $sessions) 0) ("/agenda/" | relURL) "") "linkLabel" "See the full agenda") }}
-    {{ if $sessions }}
-    <div class="grid rules" style="--min: 100%">
-      {{ range first 4 (where $sessions "service" "!=" true) }}
-      <a href="{{ .url }}" class="program-row">
-        <span class="program-row__time">{{ .start }} — {{ .end }}</span>
-        <span class="program-row__title">{{ .title }}</span>
-        <span class="program-row__speaker">{{ partial "speakerNames.html" .speakerPages }}</span>
-        <span class="mono">{{ .room }}{{ with .lang }} · {{ . }}{{ end }}</span>
-      </a>
+    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Program" "link" (cond (gt (len $talks) 0) ("/agenda/" | relURL) "") "linkLabel" "See the full agenda") }}
+    {{ if $talks }}
+    {{- /* Numbers, all derived from data/sessions.yml. */ -}}
+    {{ $speakers := slice }}
+    {{ $langs := slice }}
+    {{ $workshops := 0 }}
+    {{ range $talks }}
+      {{ range .speakers }}{{ if not (in $speakers .) }}{{ $speakers = $speakers | append . }}{{ end }}{{ end }}
+      {{ with .lang }}{{ if not (in $langs .) }}{{ $langs = $langs | append . }}{{ end }}{{ end }}
+      {{ if or (eq (lower (.format | default "")) "workshop") (in (lower (.track | default "")) "workshop") }}{{ $workshops = add $workshops 1 }}{{ end }}
+    {{ end }}
+    {{ $tracks := slice }}
+    {{ range site.Data.sessions.tracks }}{{ if where $talks "track" .name }}{{ $tracks = $tracks | append . }}{{ end }}{{ end }}
+
+    <dl class="program-stats">
+      <div><dt>Talks</dt><dd>{{ sub (len $talks) $workshops }}</dd></div>
+      {{ with $tracks }}<div><dt>Tracks</dt><dd>{{ len . }}</dd></div>{{ end }}
+      {{ with $speakers }}<div><dt>Speakers</dt><dd>{{ len . }}</dd></div>{{ end }}
+      {{ if $workshops }}<div><dt>Workshops</dt><dd>{{ $workshops }}</dd></div>{{ end }}
+      {{ with $langs }}<div><dt>Languages</dt><dd>{{ delimit . " & " }}</dd></div>{{ end }}
+    </dl>
+
+    {{- /* Filled in by the script while the event is running; replaces the track cards. */ -}}
+    <div class="now-next" data-now-next hidden>
+      <div>
+        <h3 class="now-next__label"><span class="now-next__dot"></span>Now</h3>
+        <div class="grid rules" style="--min: 240px" data-now-list></div>
+      </div>
+      <div data-next-block>
+        <h3 class="now-next__label">Next · <span data-next-time></span></h3>
+        <div class="grid rules" style="--min: 240px" data-next-list></div>
+      </div>
+    </div>
+
+    {{ with $tracks }}
+    <div class="grid rules" style="--min: 240px" data-track-cards>
+      {{ range . }}
+      {{ $trackTalks := where $talks "track" .name }}
+      {{ $trackLangs := slice }}{{ $rooms := slice }}
+      {{ range $trackTalks }}
+        {{ with .lang }}{{ if not (in $trackLangs .) }}{{ $trackLangs = $trackLangs | append . }}{{ end }}{{ end }}
+        {{ with .room }}{{ if not (in $rooms .) }}{{ $rooms = $rooms | append . }}{{ end }}{{ end }}
+      {{ end }}
+      <article class="track-card" style="--accent: var(--df-{{ .color }})">
+        <span class="bar"></span>
+        <h3 class="track-card__name">{{ .name }}</h3>
+        <p class="track-card__meta">
+          {{ len $trackTalks }} {{ if eq (len $trackTalks) 1 }}session{{ else }}sessions{{ end }}{{ with $trackLangs }} · {{ delimit . " & " }}{{ end }}
+          {{ with $rooms }}<br>{{ delimit . ", " }}{{ end }}
+        </p>
+        <ul class="track-card__talks">
+          {{ range first 3 $trackTalks }}
+          <li><a href="{{ .url }}">{{ .title }}</a></li>
+          {{ end }}
+        </ul>
+        <a class="track-card__more" href="{{ "/agenda/" | relURL }}?track={{ .name | urlquery }}">All {{ .name }} sessions →</a>
+      </article>
       {{ end }}
     </div>
+    {{ end }}
     {{ else }}
     {{ partial "comingSoon.html" .page }}
     {{ end }}
