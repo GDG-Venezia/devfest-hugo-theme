@@ -1,6 +1,19 @@
-// DevFest Venezia 26 — progressive enhancements. The site works without this script.
+// DevFest Venezia — progressive enhancements. The site works without this script.
 
-const SAVED_KEY = "devfest26:saved";
+// Saved talks live in this browser only (localStorage): no account, no sync.
+const SAVED_KEY = "devfest:saved";
+const SAVE_HINT_KEY = "devfest:saved-hint-seen";
+
+function storageAvailable() {
+  try {
+    const probe = "devfest:probe";
+    localStorage.setItem(probe, "1");
+    localStorage.removeItem(probe);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 function readSaved() {
   try {
@@ -13,9 +26,26 @@ function readSaved() {
 function writeSaved(saved) {
   try {
     localStorage.setItem(SAVED_KEY, JSON.stringify([...saved]));
+    return true;
   } catch {
-    // Storage unavailable (private mode): saving only lasts for this page view.
+    return false;
   }
+}
+
+let toastTimer;
+function showToast(message, { long = false } = {}) {
+  let toast = document.querySelector("[data-toast]");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "toast";
+    toast.setAttribute("data-toast", "");
+    toast.setAttribute("role", "status");
+    document.body.append(toast);
+  }
+  toast.textContent = message;
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.hidden = true; }, long ? 7000 : 2500);
 }
 
 function initMenu() {
@@ -42,7 +72,13 @@ function initMenu() {
 
 function initAgenda() {
   const saved = readSaved();
+  const canStore = storageAvailable();
   const saveButtons = document.querySelectorAll("[data-save]");
+  const savedNote = document.querySelector("[data-saved-note]");
+  if (savedNote) {
+    savedNote.querySelectorAll("[data-storage-ok]").forEach((el) => { el.hidden = !canStore; });
+    savedNote.querySelectorAll("[data-storage-off]").forEach((el) => { el.hidden = canStore; });
+  }
   const filterBar = document.querySelector("[data-agenda-filter]");
   let activeFilter = "All";
 
@@ -66,6 +102,7 @@ function initAgenda() {
     });
     // A timetable with most cells hidden reads badly: filtered views become a list.
     grid?.classList.toggle("is-list", activeFilter !== "All");
+    if (savedNote) savedNote.hidden = activeFilter !== "saved";
     const count = document.querySelector("[data-result-count]");
     if (count) count.textContent = String(visible);
     const empty = document.querySelector("[data-empty-state]");
@@ -84,10 +121,21 @@ function initAgenda() {
     button.addEventListener("click", (e) => {
       e.preventDefault();
       const id = button.dataset.save;
-      if (saved.has(id)) saved.delete(id);
-      else saved.add(id);
-      writeSaved(saved);
+      const adding = !saved.has(id);
+      if (adding) saved.add(id);
+      else saved.delete(id);
+      const stored = writeSaved(saved);
       renderSaved();
+      if (adding) {
+        if (!stored) {
+          showToast("Saved for now only: this browser can't keep it after you leave the page.", { long: true });
+        } else if (!localStorage.getItem(SAVE_HINT_KEY)) {
+          localStorage.setItem(SAVE_HINT_KEY, "1");
+          showToast("Saved to My agenda on this device only. It won't sync to other devices or browsers.", { long: true });
+        } else {
+          showToast("Saved on this device");
+        }
+      }
       if (activeFilter === "saved") applyFilter();
     });
   });

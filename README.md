@@ -74,6 +74,9 @@ section with "Now & next" (from an hour before the first session until the last 
 the visitor's clock. Preview it at any time with `?now=`, e.g. `/?now=2026-10-24T11:00:00%2B02:00`.
 The agenda accepts `?track=<name>` to open with a track selected.
 
+"Save" and "My agenda" use the browser's localStorage only: no account and no sync. The agenda shows
+a notice when "My agenda" is open, and the first save explains the same in a short message.
+
 ### `sessions.yml`
 
 ```yaml

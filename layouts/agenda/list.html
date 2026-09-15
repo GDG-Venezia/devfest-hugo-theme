@@ -4,7 +4,7 @@
 {{ partial "pageHead.html" (dict
   "eyebrow" (.Params.eyebrow | default site.Params.description)
   "title" .Title
-  "lead" (cond (gt (len $sessions) 0) "Filter by track. Save the talks you want: they stay on this device." "")
+  "lead" (cond (gt (len $sessions) 0) "Filter by track, and save the talks you want to your agenda on this device." "")
 ) }}
 
 {{ if $sessions }}
@@ -29,6 +29,23 @@
     {{ $columns := slice }}
     {{ range $data.tracks }}{{ if where $sessions "track" .name }}{{ $columns = $columns | append . }}{{ end }}{{ end }}
     {{ $lastRow := add (len $starts) 2 }}
+
+    <aside class="saved-note" data-saved-note hidden aria-live="polite">
+      <span class="saved-note__icon" aria-hidden="true">i</span>
+      <div>
+        <h2 class="saved-note__title" data-storage-ok>Your agenda is saved on this device only</h2>
+        <h2 class="saved-note__title" data-storage-off hidden>This browser can't keep your agenda</h2>
+        <p data-storage-ok>
+          It lives in this browser, with no account behind it. It won't appear on your phone, another computer
+          or another browser, and it disappears if you clear your browsing data or use private browsing.
+        </p>
+        <p data-storage-off hidden>
+          Saving is blocked here (often in private browsing), so saved talks are forgotten as soon as you leave
+          or reload the page.
+        </p>
+        <p class="saved-note__tip">To keep a talk everywhere, open it and use <strong>Add to calendar</strong>.</p>
+      </div>
+    </aside>
 
     <div class="agenda-grid" style="--columns: {{ len $columns }}" data-agenda-grid>
       <div class="agenda-grid__corner" aria-hidden="true"></div>
@@ -57,7 +74,10 @@
       {{ end }}
       {{ end }}
     </div>
-    <p class="muted" data-empty-state hidden style="padding: 32px 0">No sessions here yet. Use “Save” on a session to add it to your agenda.</p>
+    <div class="empty-state" data-empty-state hidden>
+      <h3>Nothing saved yet</h3>
+      <p>Tap <strong>Save</strong> on any session to build your own agenda for the day.</p>
+    </div>
   </div>
 </section>
 {{ else }}
