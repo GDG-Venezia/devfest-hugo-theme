@@ -20,9 +20,15 @@
       </div>
     </div>
     <div class="hero__art" aria-hidden="true">
+      {{- /* Tiles tint photos from data/gallery.yml; without photos they stay plain colours. */ -}}
+      {{ $photos := slice }}
+      {{ with site.Data.gallery }}{{ if .enable }}{{ range .galleryImage }}{{ $photos = $photos | append .image }}{{ end }}{{ end }}{{ end }}
       <div class="mosaic">
-        <span></span><span></span><span></span><span class="w"></span>
-        <span></span><span></span><span class="w"></span><span></span>
+        {{ range $i, $tone := slice "blue" "ink" "yellow" "paper" "green" "red" "paper" "ink" }}
+        <span class="mosaic__tile mosaic__tile--{{ $tone }}">
+          {{ with $photos }}<img src="{{ index . (mod $i (len .)) | relURL }}" alt="">{{ end }}
+        </span>
+        {{ end }}
       </div>
     </div>
   </div>

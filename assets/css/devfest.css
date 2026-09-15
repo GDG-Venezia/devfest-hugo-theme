@@ -198,16 +198,39 @@ p { margin: 0; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .hero__art { min-width: 0; padding-bottom: clamp(32px, 4vw, 56px); }
 .mosaic { width: 100%; aspect-ratio: 1 / 1; display: grid; grid-template: repeat(4, 1fr) / repeat(4, 1fr); gap: 4px; }
-.mosaic span { opacity: 0; transform: scale(0.92); animation: df-tile 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
-.mosaic .w { background: var(--df-paper); border: 1px solid var(--df-ink); }
-.mosaic span:nth-child(1) { grid-area: 1 / 1 / 3 / 3; background: var(--df-blue); animation-delay: 0.05s; }
-.mosaic span:nth-child(2) { grid-area: 1 / 3 / 2 / 5; background: var(--df-ink); animation-delay: 0.12s; }
-.mosaic span:nth-child(3) { grid-area: 2 / 3 / 4 / 4; background: var(--df-yellow); animation-delay: 0.19s; }
-.mosaic span:nth-child(4) { grid-area: 2 / 4 / 3 / 5; animation-delay: 0.26s; }
-.mosaic span:nth-child(5) { grid-area: 3 / 1 / 5 / 2; background: var(--df-green); animation-delay: 0.33s; }
-.mosaic span:nth-child(6) { grid-area: 4 / 2 / 5 / 4; background: var(--df-red); animation-delay: 0.40s; }
-.mosaic span:nth-child(7) { grid-area: 3 / 2 / 4 / 3; animation-delay: 0.47s; }
-.mosaic span:nth-child(8) { grid-area: 3 / 4 / 5 / 5; background: var(--df-ink); animation-delay: 0.54s; }
+.mosaic__tile {
+  position: relative; overflow: hidden; background: var(--tone);
+  opacity: 0; transform: scale(0.92); animation: df-tile 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.mosaic__tile img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(1.1) contrast(1.05); transform: scale(1.04);
+  transition: transform 0.6s ease;
+}
+/* Brand colour tints the photo but keeps its light and shadow. */
+.mosaic__tile::after {
+  content: ""; position: absolute; inset: 0; background: var(--tone);
+  mix-blend-mode: color; opacity: 0.7; transition: opacity 0.4s ease;
+}
+.mosaic__tile--blue { --tone: var(--df-blue); }
+.mosaic__tile--yellow { --tone: var(--df-yellow); }
+.mosaic__tile--green { --tone: var(--df-green); }
+.mosaic__tile--red { --tone: var(--df-red); }
+/* Dark tiles: a light shade. Paper tiles: the photo as it is. */
+.mosaic__tile--ink { --tone: var(--df-ink); }
+.mosaic__tile--ink::after { mix-blend-mode: normal; opacity: 0.3; }
+.mosaic__tile--paper { --tone: var(--df-paper); border: 1px solid var(--df-ink); }
+.mosaic__tile--paper::after { display: none; }
+.mosaic__tile:hover img { transform: scale(1); }
+.mosaic__tile:hover::after { opacity: 0; }
+.mosaic__tile:nth-child(1) { grid-area: 1 / 1 / 3 / 3; animation-delay: 0.05s; }
+.mosaic__tile:nth-child(2) { grid-area: 1 / 3 / 2 / 5; animation-delay: 0.12s; }
+.mosaic__tile:nth-child(3) { grid-area: 2 / 3 / 4 / 4; animation-delay: 0.19s; }
+.mosaic__tile:nth-child(4) { grid-area: 2 / 4 / 3 / 5; animation-delay: 0.26s; }
+.mosaic__tile:nth-child(5) { grid-area: 3 / 1 / 5 / 2; animation-delay: 0.33s; }
+.mosaic__tile:nth-child(6) { grid-area: 4 / 2 / 5 / 4; animation-delay: 0.40s; }
+.mosaic__tile:nth-child(7) { grid-area: 3 / 2 / 4 / 3; animation-delay: 0.47s; }
+.mosaic__tile:nth-child(8) { grid-area: 3 / 4 / 5 / 5; animation-delay: 0.54s; }
 @keyframes df-tile { to { opacity: 1; transform: none; } }
 
 /* Facts strip */
