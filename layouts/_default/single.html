@@ -1,0 +1,8 @@
+{{ define "main" }}
+{{ partial "pageHead.html" (dict "title" .Title) }}
+<section class="section">
+  <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px)">
+    <div class="prose">{{ .Content }}</div>
+  </div>
+</section>
+{{ end }}

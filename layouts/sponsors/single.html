@@ -1,0 +1,31 @@
+{{ define "main" }}
+<div class="wrap"><a href="{{ "/sponsors/" | relURL }}" class="back-link">← All sponsors</a></div>
+<section class="section speaker-detail">
+  <div class="wrap grid">
+    <div class="speaker-detail__aside">
+      <div class="logo-cell" style="border: 1px solid var(--df-ink); --h: 220px; --logo: 120px">
+        {{ with .Params.photo }}<img src="{{ . | relURL }}" alt="{{ $.Params.name }}">{{ end }}
+      </div>
+      <div class="socials">
+        {{ with .Params.website }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">Website</a>{{ end }}
+      </div>
+    </div>
+    <div>
+      <span class="mono">Sponsor</span>
+      <h1>{{ .Params.name }}</h1>
+      <div class="prose" style="margin-top: 22px">
+        <p>{{ .Params.desc | safeHTML }}</p>
+        {{ with .Params.careers }}
+        <h2>Work with us</h2>
+        <p>{{ . | safeHTML }}</p>
+        {{ end }}
+      </div>
+      {{ with .Params.youtube }}
+      <div class="video">
+        <iframe src="https://www.youtube-nocookie.com/embed/{{ . }}" title="Video" allowfullscreen loading="lazy"></iframe>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

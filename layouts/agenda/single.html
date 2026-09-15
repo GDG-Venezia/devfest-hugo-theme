@@ -1,0 +1,50 @@
+{{ define "main" }}
+{{ $id := .Params.sessionId }}
+{{ $session := index (where (partial "functions/sessions.html" .) "id" $id) 0 }}
+{{ with $session }}
+<div class="wrap"><a href="{{ "/agenda/" | relURL }}" class="back-link">← Back to agenda</a></div>
+<section class="section talk">
+  <div class="wrap" style="padding-top: clamp(20px, 2.6vw, 36px)">
+    <div class="talk__chips">
+      {{ with .track }}<span class="chip chip--fill" style="--accent: var(--df-{{ $session.color }})">{{ . }}</span>{{ end }}
+      {{ with .level }}<span class="chip">{{ . }}</span>{{ end }}
+      {{ with .lang }}<span class="chip">{{ . }}</span>{{ end }}
+    </div>
+    <h1>{{ .title }}</h1>
+
+    <div class="grid rules talk__stats">
+      <div><div class="mono">Time</div><div class="talk__stat">{{ .start }} — {{ .end }}</div></div>
+      <div><div class="mono">Room</div><div class="talk__stat">{{ .room }}</div></div>
+      <div><div class="mono">Duration</div><div class="talk__stat">{{ .minutes }} min</div></div>
+    </div>
+
+    <div class="grid talk__body">
+      <div>
+        <div class="talk__abstract">{{ .abstract | markdownify }}</div>
+        <div class="talk__actions">
+          <button type="button" class="btn btn--lg" aria-pressed="false" data-save="{{ .id }}">Save</button>
+          {{ $dates := printf "%s/%s" (.startTime.UTC.Format "20060102T150405Z") (.endTime.UTC.Format "20060102T150405Z") }}
+          {{ $location := printf "%s, %s" .room site.Params.location.venezia.address }}
+          <a class="btn btn--lg" target="_blank" rel="noopener"
+             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ printf "%s — %s" .title site.Title | urlquery }}&dates={{ $dates }}&location={{ $location | urlquery }}">Add to calendar</a>
+        </div>
+      </div>
+      {{ with .speakerPages }}
+      <div class="talk__speaker">
+        <div class="mono">{{ if gt (len .) 1 }}Speakers{{ else }}Speaker{{ end }}</div>
+        {{ range . }}
+        <a href="{{ .RelPermalink }}">
+          {{ with .Params.photo }}<img class="talk__speaker-photo" src="{{ . | relURL }}" alt="">{{ else }}<span class="talk__speaker-photo"></span>{{ end }}
+          <span>
+            <span style="display:block; font-family: var(--df-display); font-weight: 600; font-size: 18px">{{ .Params.name | default .Title }}</span>
+            {{ with .Params.role | default .Params.jobTitle }}<span class="muted" style="display:block; font-size: 13px; margin-top: 3px">{{ . }}</span>{{ end }}
+          </span>
+        </a>
+        {{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}

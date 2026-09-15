@@ -1,0 +1,13 @@
+{{ $tiers := partial "functions/sponsorTiers.html" .page }}
+{{ if $tiers }}
+<section class="section section--sand" id="sponsor">
+  <div class="wrap">
+    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Sponsors & partners" "link" ("/sponsors/" | relURL) "linkLabel" "All sponsors") }}
+    <div class="grid rules logo-grid">
+      {{ range $tiers }}{{ range .sponsors }}
+      {{ partial "logoCell.html" (dict "sponsor" .) }}
+      {{ end }}{{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

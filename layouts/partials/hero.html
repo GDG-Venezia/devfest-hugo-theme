@@ -1,0 +1,31 @@
+{{ with site.Data.hero }}
+{{ if .enable }}
+{{ $cta := partial "functions/primaryCta.html" $ }}
+{{ $cfp := site.Data.cfp }}
+<section class="section hero">
+  <div class="wrap">
+    <div class="hero__copy">
+      {{ with .eyebrow }}<span class="chip"><span class="dot"></span>{{ . }}</span>{{ end }}
+      <h1>{{ .title | safeHTML }}</h1>
+      <p class="lead">{{ .subtitle | safeHTML }}</p>
+      <div class="hero__actions">
+        {{ with $cta.url }}
+        <a href="{{ . }}" class="btn btn--solid btn--lg" target="_blank" rel="noopener">{{ $cta.label }}</a>
+        {{ end }}
+        {{ if and $cfp.enable (ne $cta.url $cfp.buttonTarget) }}
+        <a href="#cfp" class="btn btn--lg">Submit a talk — CFP open</a>
+        {{ else }}
+        <a href="{{ "/venue/" | relURL }}" class="btn btn--lg">How to get there</a>
+        {{ end }}
+      </div>
+    </div>
+    <div class="hero__art" aria-hidden="true">
+      <div class="mosaic">
+        <span></span><span></span><span></span><span class="w"></span>
+        <span></span><span></span><span class="w"></span><span></span>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}

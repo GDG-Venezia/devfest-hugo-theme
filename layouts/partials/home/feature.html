@@ -1,0 +1,17 @@
+{{ $colors := slice "blue" "red" "yellow" "green" }}
+{{ with site.Data.feature }}
+<section class="section" id="feature">
+  <div class="wrap">
+    {{ partial "sectionHead.html" (dict "num" $.num "accent" $.accent "title" .title) }}
+    <div class="grid rules" style="--min: 260px">
+      {{ range $i, $f := .features }}
+      <div class="card">
+        <span class="bar" style="--accent: var(--df-{{ index $colors (mod $i 4) }})"></span>
+        <h3>{{ $f.name }}</h3>
+        <p>{{ $f.description }}</p>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

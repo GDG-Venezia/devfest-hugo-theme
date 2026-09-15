@@ -1,0 +1,25 @@
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div>
+      <a href="{{ "/" | relURL }}" class="brand brand--tile" aria-label="{{ site.Title }} — home">{{ partial "brand.html" . }}</a>
+      <p>{{ site.Params.footerDescription | safeHTML }}</p>
+    </div>
+    {{ range site.Data.footer.columns }}
+    <div>
+      <div class="mono">{{ .title }}</div>
+      <div class="footer-links">
+        {{ range .links }}
+        {{ $external := hasPrefix .url "http" }}
+        <a href="{{ if $external }}{{ .url }}{{ else }}{{ .url | relURL }}{{ end }}"{{ if $external }} target="_blank" rel="noopener"{{ end }}>{{ .label }}</a>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+  <div class="site-footer__legal">
+    <div class="wrap">
+      <span>{{ replace site.Params.copyright "{year}" (string now.Year) | safeHTML }}</span>
+      <a href="https://gdg.community.dev/gdg-venezia/" target="_blank" rel="noopener">GDG Venezia</a>
+    </div>
+  </div>
+</footer>

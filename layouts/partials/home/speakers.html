@@ -1,0 +1,14 @@
+{{ $speakers := where site.RegularPages "Section" "speakers" }}
+{{ $featured := where $speakers "Params.featured" true }}
+{{ if not $featured }}{{ $featured = $speakers }}{{ end }}
+{{ $tracks := partial "functions/speakerTracks.html" .page }}
+<section class="section" id="speakers">
+  <div class="wrap">
+    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Speakers" "link" ("/speakers/" | relURL) "linkLabel" "Meet them all") }}
+    <div class="grid" style="--min: 200px">
+      {{ range first 6 ($featured.ByParam "weight") }}
+      {{ partial "speakerCard.html" (dict "page" . "track" (index $tracks .File.ContentBaseName)) }}
+      {{ end }}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+{{ define "main" }}
+{{ partial "pageHead.html" (dict "title" .Title) }}
+<section class="section">
+  <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px)">
+    {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+    <ul class="prose">
+      {{ range .Pages }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}
+    </ul>
+  </div>
+</section>
+{{ end }}

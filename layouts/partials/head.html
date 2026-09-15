@@ -1,0 +1,25 @@
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+
+    {{ "<!--Meta For No Index-->" | safeHTML }}
+    <meta name="robots" content="noindex, Nofollow, Noimageindex">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101010" />
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}">
+    {{ template "_internal/opengraph.html" . }}
+    {{ template "_internal/schema.html" . }}
+    {{ template "_internal/twitter_cards.html" . }}
+
+    {{hugo.Generator}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    {{ $style := resources.Get "css/devfest.css" | resources.Minify | resources.Fingerprint }}
+    <link href="{{ $style.RelPermalink }}" rel="stylesheet" integrity="{{ $style.Data.Integrity }}" />
+    {{ $script := resources.Get "js/site.js" | js.Build (dict "minify" true) | resources.Fingerprint }}
+    <script src="{{ $script.RelPermalink }}" defer></script>
+
+    <link rel="icon" href="{{ "images/favicon.png" | relURL }}" type="image/png" />
+  </head>

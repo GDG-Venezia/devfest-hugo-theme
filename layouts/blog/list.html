@@ -1,0 +1,22 @@
+{{ define "main" }}
+{{ partial "pageHead.html" (dict "eyebrow" "News" "title" .Title) }}
+<section>
+  <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px) clamp(40px, 5vw, 72px)">
+    {{ with .Paginator.Pages }}
+    <div class="grid" style="--min: 280px">
+      {{ range . }}
+      <a href="{{ .RelPermalink }}" class="speaker-card">
+        {{ with .Params.featureImage }}<img src="{{ . | relURL }}" alt="" loading="lazy" style="width:100%; aspect-ratio: 16/10; object-fit: cover; border: 1px solid var(--df-ink)">{{ end }}
+        <div class="speaker-card__name">{{ .Title }}</div>
+        <div class="speaker-card__role">{{ .PublishDate.Format "2 January 2006" }}</div>
+        <p class="muted" style="margin-top: 8px; font-size: 14px">{{ truncate 120 .Summary }}</p>
+      </a>
+      {{ end }}
+    </div>
+    {{ partial "pagination.html" $ }}
+    {{ else }}
+    <p class="muted">No posts yet.</p>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,7 @@
+{{- /* Params: sponsor (name, image, link), showName (bool) */ -}}
+{{ $s := .sponsor }}
+{{ $external := hasPrefix ($s.link | default "") "http" }}
+{{ if $s.link }}<a href="{{ if $external }}{{ $s.link }}{{ else }}{{ $s.link | relURL }}{{ end }}" class="logo-cell"{{ if $external }} target="_blank" rel="noopener"{{ end }}>{{ else }}<div class="logo-cell">{{ end }}
+  <img src="{{ $s.image | relURL }}" alt="{{ $s.name }}" loading="lazy">
+  {{ if .showName }}<span class="logo-cell__name">{{ $s.name }}</span>{{ end }}
+{{ if $s.link }}</a>{{ else }}</div>{{ end }}

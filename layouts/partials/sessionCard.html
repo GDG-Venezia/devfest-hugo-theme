@@ -1,0 +1,15 @@
+{{- /* A session from functions/sessions.html */ -}}
+<article class="session-card" style="--accent: var(--df-{{ .color }})" data-session data-track="{{ .track }}" data-id="{{ .id }}"{{ if .service }} data-service{{ end }}>
+  <div class="session-card__meta">
+    <span class="mono">{{ .room }}</span>
+    {{ with .lang }}<span class="mono">{{ . }}</span>{{ end }}
+  </div>
+  <h3 class="session-card__title">{{ if .url }}<a href="{{ .url }}">{{ .title }}</a>{{ else }}{{ .title }}{{ end }}</h3>
+  {{ with .speakerPages }}<span class="session-card__speaker">{{ partial "speakerNames.html" . }}</span>{{ end }}
+  {{ if not .service }}
+  <div class="session-card__foot">
+    <span class="session-card__track">{{ .track }}</span>
+    <button type="button" class="btn btn--sm" aria-pressed="false" data-save="{{ .id }}">Save</button>
+  </div>
+  {{ end }}
+</article>

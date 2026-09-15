@@ -1,0 +1,6 @@
+<section class="section" id="location">
+  <div class="wrap">
+    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Getting there" "link" ("/venue/" | relURL) "linkLabel" "Venue details") }}
+    {{ partial "venueBlock.html" .page }}
+  </div>
+</section>

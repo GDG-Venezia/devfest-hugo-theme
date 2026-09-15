@@ -1,0 +1,16 @@
+{{ with site.Data.cfp }}
+{{ if .enable }}
+<section class="section section--blue band" id="cfp">
+  <div class="wrap">
+    <div>
+      <h2>{{ .title }}</h2>
+      <p>{{ .subtitle }}</p>
+    </div>
+    <div class="band__actions">
+      <a href="{{ .buttonTarget }}" class="btn btn--light btn--lg" target="_blank" rel="noopener">{{ .buttonLabel }}</a>
+      {{ with .deadline }}<span class="band__note">Closes {{ . }}</span>{{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
+{{ end }}

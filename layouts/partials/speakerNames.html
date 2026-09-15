@@ -1,0 +1,1 @@
+{{- range $i, $p := . }}{{ if $i }}, {{ end }}{{ $p.Params.name | default $p.Title }}{{ end -}}

@@ -1,0 +1,46 @@
+{{ define "main" }}
+{{ $slug := .File.ContentBaseName }}
+{{ $sessions := slice }}
+{{ range partial "functions/sessions.html" . }}{{ if in .speakers $slug }}{{ $sessions = $sessions | append . }}{{ end }}{{ end }}
+<div class="wrap"><a href="{{ "/speakers/" | relURL }}" class="back-link">← All speakers</a></div>
+<section class="section speaker-detail">
+  <div class="wrap grid">
+    <div class="speaker-detail__aside">
+      <div class="speaker-card__photo">
+        {{ with .Params.photo }}<img src="{{ . | relURL }}" alt="{{ $.Params.name | default $.Title }}">{{ end }}
+      </div>
+      <div class="socials">
+        {{ with .Params.twitter }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">X / Twitter</a>{{ end }}
+        {{ with .Params.linkedin }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">LinkedIn</a>{{ end }}
+        {{ with .Params.bluesky }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">Bluesky</a>{{ end }}
+        {{ with .Params.github }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">GitHub</a>{{ end }}
+        {{ with .Params.website }}<a class="btn" href="{{ . }}" target="_blank" rel="noopener">Website</a>{{ end }}
+      </div>
+    </div>
+    <div>
+      {{ with index $sessions 0 }}<span class="mono" style="color: var(--df-{{ .color }})">{{ .track }}</span>{{ end }}
+      <h1>{{ .Params.name | default .Title }}</h1>
+      {{ with .Params.role | default .Params.jobTitle }}<div class="speaker-detail__role">{{ . }}</div>{{ end }}
+      <div class="speaker-detail__bio">{{ with .Content }}{{ . }}{{ else }}{{ .Params.bio | markdownify }}{{ end }}</div>
+      {{ with $sessions }}
+      <h2 class="mono" style="margin: 32px 0 14px; font-weight: 500">Sessions</h2>
+      {{ range . }}
+      <a href="{{ .url }}" class="session-link" style="--accent: var(--df-{{ .color }})">
+        <span class="session-link__meta">{{ .start }} · {{ .room }}{{ with .lang }} · {{ . }}{{ end }}</span>
+        <span class="session-link__title">{{ .title }}</span>
+      </a>
+      {{ end }}
+      {{ else }}
+      {{ with .Params.presentation }}
+      <h2 class="mono" style="margin: 32px 0 14px; font-weight: 500">Session</h2>
+      <div class="session-link">
+        {{ with $.Params.lang }}<span class="session-link__meta">{{ . }}</span>{{ end }}
+        <span class="session-link__title">{{ .title }}</span>
+        {{ with .abstract }}<div class="speaker-detail__bio" style="margin-top: 4px">{{ . | markdownify }}</div>{{ end }}
+      </div>
+      {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}

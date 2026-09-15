@@ -1,0 +1,9 @@
+{{ with site.Data.comingSoon }}
+{{ if .enable }}
+<div class="coming-soon">
+  <span class="mono">{{ .eyebrow }}</span>
+  <h3>{{ .title }}</h3>
+  <p>{{ .subtitle }}</p>
+</div>
+{{ end }}
+{{ end }}

@@ -1,0 +1,8 @@
+{{- /* Params: num, accent, title, link (optional), linkLabel (optional) */ -}}
+<div class="section-head">
+  <div class="section-head__title" style="--accent: var(--df-{{ .accent }})">
+    {{ with .num }}<span class="section-head__num">{{ . }}</span>{{ end }}
+    <h2>{{ .title }}</h2>
+  </div>
+  {{ with .link }}<a href="{{ . }}" class="more-link">{{ $.linkLabel }} →</a>{{ end }}
+</div>

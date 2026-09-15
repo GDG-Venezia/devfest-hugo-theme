@@ -1,0 +1,13 @@
+{{- /* Generates one talk page per session in data/sessions.yml. */ -}}
+{{- with site.Data.sessions -}}
+  {{- if .enable -}}
+    {{- range where .sessions "service" "!=" true -}}
+      {{- $.AddPage (dict
+        "path" .id
+        "title" .title
+        "kind" "page"
+        "params" (dict "sessionId" .id)
+      ) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

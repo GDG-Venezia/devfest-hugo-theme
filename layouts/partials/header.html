@@ -1,0 +1,35 @@
+{{ $cta := partial "functions/primaryCta.html" . }}
+{{ $current := . }}
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a href="{{ "/" | relURL }}" class="brand" aria-label="{{ site.Title }} — home">
+      {{ partial "brand.html" . }}
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      {{ range site.Menus.main }}
+      <a href="{{ .URL }}"{{ if or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{ end }}
+    </nav>
+    <div class="site-header__actions">
+      {{ with $cta.url }}
+      <a href="{{ . }}" class="btn btn--solid site-header__cta" target="_blank" rel="noopener">{{ $cta.shortLabel }}</a>
+      {{ end }}
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu" data-menu-toggle>
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav aria-label="Mobile">
+      <a class="mobile-menu__item" href="{{ "/" | relURL }}"><span>Home</span><span class="mobile-menu__num">01</span></a>
+      {{ range $i, $item := site.Menus.main }}
+      <a class="mobile-menu__item" href="{{ $item.URL }}"{{ if or ($current.IsMenuCurrent "main" $item) ($current.HasMenuCurrent "main" $item) }} aria-current="page"{{ end }}>
+        <span>{{ $item.Name }}</span><span class="mobile-menu__num">{{ printf "%02d" (add $i 2) }}</span>
+      </a>
+      {{ end }}
+    </nav>
+    {{ with $cta.url }}
+    <a href="{{ . }}" class="btn btn--light btn--lg" target="_blank" rel="noopener">{{ $cta.label }}</a>
+    {{ end }}
+  </div>
+</header>

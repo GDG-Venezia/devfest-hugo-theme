@@ -1,0 +1,16 @@
+{{ with site.Data.facts }}
+{{ if .enable }}
+<section class="facts" aria-label="Key facts">
+  <div class="wrap">
+    <dl class="grid" style="margin:0">
+      {{ range .facts }}
+      <div class="fact">
+        <dt class="mono">{{ .label }}</dt>
+        <dd class="fact__value" style="margin:0">{{ .value }}</dd>
+      </div>
+      {{ end }}
+    </dl>
+  </div>
+</section>
+{{ end }}
+{{ end }}

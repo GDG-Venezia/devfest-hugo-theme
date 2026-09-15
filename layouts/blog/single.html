@@ -1,0 +1,10 @@
+{{ define "main" }}
+<div class="wrap"><a href="{{ "/blog/" | relURL }}" class="back-link">← All posts</a></div>
+{{ partial "pageHead.html" (dict "eyebrow" (.PublishDate.Format "2 January 2006") "title" .Title) }}
+<section class="section">
+  <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px)">
+    {{ with .Params.featureImage }}<img src="{{ . | relURL }}" alt="" style="border: 1px solid var(--df-ink); margin-bottom: 28px">{{ end }}
+    <div class="prose">{{ .Content }}</div>
+  </div>
+</section>
+{{ end }}

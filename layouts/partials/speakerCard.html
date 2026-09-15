@@ -1,0 +1,11 @@
+{{- /* Params: page (speaker page), track (optional dict with name/color) */ -}}
+{{ $p := .page }}
+<a href="{{ $p.RelPermalink }}" class="speaker-card">
+  <div class="speaker-card__photo">
+    {{ with $p.Params.photo }}<img src="{{ . | relURL }}" alt="" loading="lazy">{{ end }}
+    {{ with $p.Params.badge }}<span class="speaker-card__badge">{{ . }}</span>{{ end }}
+  </div>
+  <div class="speaker-card__name">{{ $p.Params.name | default $p.Title }}</div>
+  {{ with $p.Params.role | default $p.Params.jobTitle }}<div class="speaker-card__role">{{ . }}</div>{{ end }}
+  {{ with .track }}<div class="speaker-card__track" style="--accent: var(--df-{{ .color }})">{{ .name }}</div>{{ end }}
+</a>

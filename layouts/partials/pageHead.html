@@ -1,0 +1,8 @@
+{{- /* Params: eyebrow, title, lead (optional) */ -}}
+<section class="page-head">
+  <div class="wrap">
+    {{ with .eyebrow }}<span class="mono">{{ . }}</span>{{ end }}
+    <h1>{{ .title }}</h1>
+    {{ with .lead }}<p class="lead">{{ . }}</p>{{ end }}
+  </div>
+</section>

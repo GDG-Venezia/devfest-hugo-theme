@@ -1,0 +1,23 @@
+{{ define "main" }}
+  {{ partial "hero.html" . }}
+  {{ partial "facts.html" . }}
+
+  {{- /* Numbered sections: disabled or empty ones are skipped without leaving gaps. */ -}}
+  {{ $sections := slice }}
+  {{ with site.Data.feature }}{{ if .enable }}{{ $sections = $sections | append "feature" }}{{ end }}{{ end }}
+  {{ $sections = $sections | append "program" }}
+  {{ if where site.RegularPages "Section" "speakers" }}{{ $sections = $sections | append "speakers" }}{{ end }}
+  {{ $sections = $sections | append "sponsors" "location" }}
+  {{ with site.Data.gallery }}{{ if .enable }}{{ $sections = $sections | append "gallery" }}{{ end }}{{ end }}
+
+  {{ $accents := slice "blue" "yellow" "red" "green" }}
+  {{ range $i, $name := $sections }}
+    {{ partial (printf "home/%s.html" $name) (dict
+      "page" $
+      "num" (printf "%02d" (add $i 1))
+      "accent" (index $accents (mod $i 4))
+    ) }}
+  {{ end }}
+
+  {{ partial "cfpSection.html" . }}
+{{ end }}

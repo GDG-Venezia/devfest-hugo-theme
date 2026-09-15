@@ -1,0 +1,15 @@
+{{ define "main" }}
+{{ with site.Data.gallery }}
+{{ partial "pageHead.html" (dict "eyebrow" "Photos from past editions" "title" $.Title "lead" .subtitle) }}
+<section>
+  <div class="wrap grid gallery" style="--min: 260px; --gap: clamp(10px, 1.2vw, 16px); padding-block: clamp(24px, 3vw, 44px) clamp(40px, 5vw, 72px)">
+    {{ range .galleryImage }}
+    <figure>
+      <img src="{{ .image | relURL }}" alt="{{ .alt }}" loading="lazy">
+      {{ with .alt }}<figcaption>{{ . }}</figcaption>{{ end }}
+    </figure>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ end }}

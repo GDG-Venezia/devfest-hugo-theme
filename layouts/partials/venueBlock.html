@@ -1,0 +1,23 @@
+{{- /* Map, address and travel options. Used on the home page and the venue page. */ -}}
+{{ $venue := site.Params.location.venezia }}
+<div class="grid" style="--min: 280px; --gap: clamp(16px, 2vw, 28px); align-items: start">
+  <div>
+    <div class="map-frame">
+      <iframe src="https://www.google.com/maps?q={{ printf "%s, %s" $venue.address $venue.desc | urlquery }}&output=embed" title="Map: {{ $venue.address }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="venue__name">{{ $venue.address | safeHTML }}</div>
+    <div class="venue__address">{{ $venue.desc }}</div>
+    <a href="{{ $venue.mapsLink }}" class="btn" style="margin-top: 14px" target="_blank" rel="noopener">Open directions</a>
+  </div>
+  {{ with site.Data.travel }}{{ if .enable }}
+  <div class="grid rules" style="--min: 100%">
+    {{ range .modes }}
+    <div class="travel">
+      <div class="travel__mode"><span class="bar" style="--accent: var(--df-{{ .color }})"></span><span class="mono" style="color: var(--df-ink)">{{ .mode }}</span></div>
+      <div class="travel__headline">{{ .headline }}</div>
+      <p>{{ .detail }}</p>
+    </div>
+    {{ end }}
+  </div>
+  {{ end }}{{ end }}
+</div>

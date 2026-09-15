@@ -1,0 +1,10 @@
+{{- /* Returns sponsor tiers from data/sponsor.yml plus partners from data/partner.yml as a final tier. */ -}}
+{{- $tiers := slice -}}
+{{- with site.Data.sponsor }}{{ if .enable }}
+  {{- range .tiers }}{{ if .sponsors }}{{ $tiers = $tiers | append . }}{{ end }}{{ end -}}
+  {{- if and (not .tiers) .partner }}{{ $tiers = $tiers | append (dict "name" .title "color" "blue" "size" "md" "sponsors" .partner) }}{{ end -}}
+{{- end }}{{ end -}}
+{{- with site.Data.partner }}{{ if and .enable .partner }}
+  {{- $tiers = $tiers | append (dict "name" .title "color" "red" "size" "sm" "sponsors" .partner) -}}
+{{- end }}{{ end -}}
+{{- return $tiers -}}

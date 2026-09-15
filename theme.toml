@@ -1,0 +1,13 @@
+name = "DevFest"
+license = "MIT"
+description = "Hugo theme for GDG Venezia's DevFest websites: data-driven agenda, speakers, sponsors, venue and gallery."
+homepage = "https://gdgvenezia.it/"
+min_version = "0.126.0"
+
+[author]
+  name = "GDG Venezia"
+
+[original]
+  name = "coHub"
+  homepage = "https://github.com/StaticMania/hugo-cohub"
+  repo = "https://github.com/StaticMania/hugo-cohub"

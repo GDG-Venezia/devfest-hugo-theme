@@ -1,0 +1,20 @@
+{{ $sessions := partial "functions/sessions.html" .page }}
+<section class="section section--ink" id="program">
+  <div class="wrap">
+    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Program" "link" (cond (gt (len $sessions) 0) ("/agenda/" | relURL) "") "linkLabel" "See the full agenda") }}
+    {{ if $sessions }}
+    <div class="grid rules" style="--min: 100%">
+      {{ range first 4 (where $sessions "service" "!=" true) }}
+      <a href="{{ .url }}" class="program-row">
+        <span class="program-row__time">{{ .start }} — {{ .end }}</span>
+        <span class="program-row__title">{{ .title }}</span>
+        <span class="program-row__speaker">{{ partial "speakerNames.html" .speakerPages }}</span>
+        <span class="mono">{{ .room }}{{ with .lang }} · {{ . }}{{ end }}</span>
+      </a>
+      {{ end }}
+    </div>
+    {{ else }}
+    {{ partial "comingSoon.html" .page }}
+    {{ end }}
+  </div>
+</section>

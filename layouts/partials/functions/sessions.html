@@ -1,0 +1,29 @@
+{{- /*
+  Returns the sessions from data/sessions.yml, sorted by start time and
+  enriched with track colour, speaker pages, talk page and absolute times.
+*/ -}}
+{{- $data := site.Data.sessions -}}
+{{- $out := slice -}}
+{{- if and $data $data.enable $data.sessions -}}
+  {{- $tz := $data.timezone | default "Europe/Rome" -}}
+  {{- $colors := dict -}}
+  {{- range $data.tracks }}{{ $colors = merge $colors (dict .name .color) }}{{ end -}}
+  {{- range sort $data.sessions "start" -}}
+    {{- $start := time.AsTime (printf "%sT%s:00" $data.date .start) $tz -}}
+    {{- $end := time.AsTime (printf "%sT%s:00" $data.date .end) $tz -}}
+    {{- $speakers := slice -}}
+    {{- range .speakers }}{{ with site.GetPage (printf "/speakers/%s" .) }}{{ $speakers = $speakers | append . }}{{ end }}{{ end -}}
+    {{- $url := "" -}}
+    {{- if not .service }}{{ with site.GetPage (printf "/agenda/%s" .id) }}{{ $url = .RelPermalink }}{{ end }}{{ end -}}
+    {{- $s := merge . (dict
+        "color" (index $colors (.track | default "") | default "ink")
+        "startTime" $start
+        "endTime" $end
+        "minutes" (int ($end.Sub $start).Minutes)
+        "speakerPages" $speakers
+        "url" $url
+      ) -}}
+    {{- $out = $out | append $s -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

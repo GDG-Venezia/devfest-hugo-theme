@@ -1,0 +1,9 @@
+{{ $pag := $.Paginator }}
+{{ if gt $pag.TotalPages 1 }}
+<nav aria-label="Pagination" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 32px">
+  {{ range $pag.Pagers }}
+  <a class="btn btn--sm" href="{{ .URL }}"{{ if eq . $pag }} aria-current="page" aria-pressed="true"{{ end }}>{{ .PageNumber }}</a>
+  {{ end }}
+  {{ if $pag.HasNext }}<a class="btn btn--sm" href="{{ $pag.Next.URL }}" rel="next">→</a>{{ end }}
+</nav>
+{{ end }}
