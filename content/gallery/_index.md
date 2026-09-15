@@ -1,3 +1,3 @@
 ---
-title: "Gallery"
+title: "Past editions"
 ---

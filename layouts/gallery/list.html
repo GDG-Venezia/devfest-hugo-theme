@@ -1,16 +1,22 @@
 {{ define "main" }}
 {{ with site.Data.gallery }}
 {{ $tones := slice "blue" "red" "yellow" "green" }}
-{{ partial "pageHead.html" (dict "eyebrow" "Photos from past editions" "title" $.Title "lead" (.albumsSubtitle | default "Every edition has its own photo album. Pick a year.")) }}
+{{ partial "pageHead.html" (dict "eyebrow" "DevFest Venezia since 2017" "title" $.Title "lead" (.albumsSubtitle | default "Photos and websites from every edition.")) }}
 {{ with .albums }}
+{{ $self := strings.TrimSuffix "/" site.BaseURL }}
 <section class="section">
   <div class="wrap grid" style="--min: 240px; padding-block: clamp(28px, 3vw, 48px)">
     {{ range $i, $album := . }}
-    <a href="{{ $album.url }}" class="album album--{{ $album.color | default (index $tones (mod $i 4)) }}{{ if not $album.cover }} album--plain{{ end }}" target="_blank" rel="noopener">
+    {{ $website := "" }}
+    {{ with $album.website }}{{ if ne (strings.TrimSuffix "/" .) $self }}{{ $website = . }}{{ end }}{{ end }}
+    <article class="album album--{{ $album.color | default (index $tones (mod $i 4)) }}{{ if not $album.cover }} album--plain{{ end }}">
       {{ with $album.cover }}<img src="{{ . | relURL }}" alt="" loading="lazy">{{ end }}
       <span class="album__year">{{ $album.year }}</span>
-      <span class="album__label"><span>{{ $album.label | default "Photo album" }}</span><span aria-hidden="true">↗</span></span>
-    </a>
+      <span class="album__links">
+        {{ with $album.url }}<a href="{{ . }}" target="_blank" rel="noopener">Photos <span aria-hidden="true">↗</span></a>{{ end }}
+        {{ with $website }}<a href="{{ . }}" target="_blank" rel="noopener">Website <span aria-hidden="true">↗</span></a>{{ end }}
+      </span>
+    </article>
     {{ end }}
   </div>
 </section>

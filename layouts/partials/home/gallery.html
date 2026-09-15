@@ -1,7 +1,7 @@
 {{ with site.Data.gallery }}
 <section class="section section--sand" id="gallery">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" $.num "accent" $.accent "title" "Past editions" "link" ("/gallery/" | relURL) "linkLabel" "All photo albums") }}
+    {{ partial "sectionHead.html" (dict "num" $.num "accent" $.accent "title" "Past editions" "link" ("/gallery/" | relURL) "linkLabel" "Photos & websites") }}
     <div class="grid gallery" style="--min: 220px">
       {{ range first 3 .galleryImage }}
       <img src="{{ .image | relURL }}" alt="{{ .alt }}" loading="lazy">
