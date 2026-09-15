@@ -286,7 +286,6 @@ p { margin: 0; }
   .speaker-card__name { font-size: 15px; }
   .speaker-card__role { font-size: 12px; }
 }
-.speaker-card__track { margin-top: 8px; font-family: var(--df-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--accent); }
 
 .speaker-detail > .wrap { padding-block: clamp(20px, 2.6vw, 36px) clamp(32px, 4vw, 56px); --min: 260px; --gap: clamp(20px, 3vw, 48px); align-items: start; }
 .speaker-detail__aside { max-width: 420px; }

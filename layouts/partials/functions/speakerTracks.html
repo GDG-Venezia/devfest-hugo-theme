@@ -1,9 +1,0 @@
-{{- /* Returns a dict: speaker slug -> {name, color} of the first session track they present in. */ -}}
-{{- $out := dict -}}
-{{- range partial "functions/sessions.html" . -}}
-  {{- $track := dict "name" .track "color" .color -}}
-  {{- range .speakers -}}
-    {{- if not (isset $out .) }}{{ $out = merge $out (dict . $track) }}{{ end -}}
-  {{- end -}}
-{{- end -}}
-{{- return $out -}}

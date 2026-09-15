@@ -1,6 +1,5 @@
 {{ define "main" }}
 {{ $speakers := .RegularPages.ByParam "weight" }}
-{{ $tracks := partial "functions/speakerTracks.html" . }}
 {{ partial "pageHead.html" (dict
   "eyebrow" (cond (gt (len $speakers) 0) (printf "%d speakers · %s" (len $speakers) site.Title) site.Title)
   "title" .Title
@@ -10,7 +9,7 @@
     {{ if $speakers }}
     <div class="speaker-grid">
       {{ range $speakers }}
-      {{ partial "speakerCard.html" (dict "page" . "track" (index $tracks .File.ContentBaseName)) }}
+      {{ partial "speakerCard.html" (dict "page" .) }}
       {{ end }}
     </div>
     {{ else }}
