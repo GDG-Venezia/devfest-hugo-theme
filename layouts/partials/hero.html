@@ -5,7 +5,7 @@
 <section class="section hero">
   <div class="wrap">
     <div class="hero__copy">
-      {{ with .eyebrow }}<span class="chip"><span class="dot"></span>{{ . }}</span>{{ end }}
+      {{ with .eyebrow }}<span class="chip">{{ . }}</span>{{ end }}
       <h1>{{ .title | safeHTML }}</h1>
       <p class="lead">{{ .subtitle | safeHTML }}</p>
       <div class="hero__actions">
