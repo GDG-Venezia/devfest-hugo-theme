@@ -1,37 +1,11 @@
-{{ define "main" }}
-{{ $sizes := dict
-  "lg" (dict "min" "280px" "h" "180px" "logo" "90px")
-  "md" (dict "min" "200px" "h" "150px" "logo" "70px")
-  "sm" (dict "min" "170px" "h" "120px" "logo" "54px")
-}}
-{{ partial "pageHead.html" (dict "eyebrow" "The companies that make a free conference possible" "title" .Title) }}
-
-{{ range partial "functions/sponsorTiers.html" . }}
-{{ $size := index $sizes (.size | default "md") }}
-<section class="section">
-  <div class="wrap tier">
-    <div class="tier-head">
-      <span class="bar" style="--accent: var(--df-{{ .color | default "blue" }})"></span>
-      <h2>{{ .name }}</h2>
-    </div>
-    <div class="grid rules" style="--min: {{ $size.min }}; --h: {{ $size.h }}; --logo: {{ $size.logo }}">
-      {{ range .sponsors }}{{ partial "logoCell.html" (dict "sponsor" . "showName" true) }}{{ end }}
-    </div>
-  </div>
-</section>
-{{ end }}
-
-{{ with site.Data.sponsor.cta }}{{ if .enable }}
-<section class="section section--green band">
-  <div class="wrap">
-    <div>
-      <h2>{{ .title }}</h2>
-      <p>{{ .subtitle }}</p>
-    </div>
-    <div class="band__actions">
-      <a href="{{ .buttonTarget }}" class="btn btn--light btn--lg">{{ .buttonLabel }}</a>
-    </div>
-  </div>
-</section>
-{{ end }}{{ end }}
-{{ end }}
+<!DOCTYPE html>
+<html lang="{{ site.LanguageCode | default "en" }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ .Title }} · {{ site.Title }}</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="{{ "/#sponsors" | absURL }}">
+  <meta http-equiv="refresh" content="0; url={{ "/#sponsors" | relURL }}">
+</head>
+<body><a href="{{ "/#sponsors" | relURL }}">{{ .Title }}</a></body>
+</html>

@@ -1,6 +1,17 @@
-<section class="section" id="location">
+<section class="section" id="venue">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Getting there" "link" ("/venue/" | relURL) "linkLabel" "Venue details") }}
+    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Getting there") }}
     {{ partial "venueBlock.html" .page }}
+    {{ with site.Data.onTheDay }}{{ if .enable }}
+    <h3 class="subhead">{{ .title }}</h3>
+    <div class="grid rules" style="--min: 230px">
+      {{ range .items }}
+      <div class="card">
+        <div class="mono">{{ .label }}</div>
+        <p style="margin-top: 10px; font-size: 15px">{{ .text }}</p>
+      </div>
+      {{ end }}
+    </div>
+    {{ end }}{{ end }}
   </div>
 </section>

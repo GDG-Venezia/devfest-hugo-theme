@@ -12,8 +12,9 @@ Requires Hugo **extended ≥ 0.126** (content adapters, `js.Build`).
 theme = "devfest-hugo-theme"
 ```
 
-The theme ships the section pages (`/agenda/`, `/speakers/`, `/sponsors/`, `/venue/`, `/gallery/`) and
-generates one talk page per session. A site only provides config, data files, speakers and images.
+The theme ships the section pages (`/agenda/`, `/speakers/`, `/gallery/`) and generates one talk page
+per session. Sponsors and venue live on the home page (`/#sponsors`, `/#venue`); `/sponsors/` redirects
+there, while sponsor detail pages (`content/sponsors/*.md`) still render. A site only provides config, data files, speakers and images.
 
 For local development against a checkout of this repo next to the sites:
 
@@ -28,6 +29,10 @@ hugo server --themesDir ..
 name = "Agenda"
 pageRef = "/agenda"
 weight = 1
+[[menu.main]]
+name = "Sponsors"
+url = "/#sponsors"
+weight = 3
 
 [params]
   description = "DevFest Venezia 2026 - 24 October - Venezia"
@@ -51,11 +56,11 @@ Every block with `enable: false` (or a missing file) is simply not rendered.
 | `feature.yml` | "What is DevFest" cards: `title`, `features: [{name, description}]` |
 | `sessions.yml` | Agenda, program preview, talk pages, live bar (see below) |
 | `comingSoon.yml` | Shown instead of the agenda while there are no sessions |
-| `sponsor.yml` | `tiers: [{name, color, size: lg/md/sm, sponsors: [{name, image, link}]}]`, optional `cta`. A flat `partner:` list also works |
+| `sponsor.yml` | Home sponsors section: `tiers: [{name, color, size: lg/md/sm, sponsors: [{name, image, link}]}]`, optional `cta`. `link` can point to a sponsor detail page (`sponsors/acme`) or an external site. A flat `partner:` list also works |
 | `partner.yml` | `title`, `partner: [{name, image, link}]` — rendered as the last tier |
 | `travel.yml` | `modes: [{mode, color, headline, detail}]` |
-| `onTheDay.yml` | Venue page cards: `title`, `items: [{label, text}]` |
-| `gallery.yml` | `subtitle`, `galleryImage: [{image, alt}]` |
+| `onTheDay.yml` | Cards under "Getting there" on the home page: `title`, `items: [{label, text}]` |
+| `gallery.yml` | `galleryImage: [{image, alt}]` (home + hero mosaic), `albums: [{year, url, cover?, color?, label?}]` (gallery page) |
 | `cfp.yml` | CFP band: `title`, `subtitle`, `buttonLabel`, `buttonTarget`, optional `deadline` |
 | `ticket.yml` | When enabled, the main call to action becomes "Reserve a seat" (`itemPrices[0].buttonTarget`) |
 | `footer.yml` | `columns: [{title, links: [{label, url}]}]` |

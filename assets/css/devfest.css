@@ -24,6 +24,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 64px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -342,9 +343,39 @@ a.logo-cell:hover { background: #FFFDF5; color: var(--df-ink); }
 .logo-cell img { max-width: 100%; max-height: var(--logo, 52px); object-fit: contain; }
 .logo-cell__name { font-family: var(--df-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--df-faint); text-align: center; }
 .tier-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.tier-head h2 { font-family: var(--df-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+.tier-head h3 { font-family: var(--df-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
 .tier-head .bar { height: 8px; }
-.section > .wrap.tier { padding-block: clamp(24px, 3vw, 44px); }
+.tier + .tier { margin-top: clamp(28px, 3.4vw, 44px); }
+.sponsor-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  margin-top: clamp(28px, 3.4vw, 44px); padding: clamp(20px, 2.4vw, 32px); background: var(--df-paper); border: 1px solid var(--df-ink);
+}
+.sponsor-cta h3 { font-weight: 700; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; }
+.sponsor-cta p { margin-top: 6px; max-width: 52ch; color: var(--df-muted); }
+.subhead { margin: clamp(32px, 4vw, 48px) 0 18px; font-weight: 700; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; }
+
+/* Albums */
+.album {
+  position: relative; display: flex; flex-direction: column; justify-content: space-between;
+  aspect-ratio: 4 / 3; padding: 20px; overflow: hidden; color: var(--df-paper); background: var(--tone);
+  border: 1px solid var(--df-ink);
+}
+.album:hover { color: var(--df-paper); }
+.album img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 0.6s ease; }
+.album::after { content: ""; position: absolute; inset: 0; background: var(--tone); mix-blend-mode: multiply; opacity: 0.85; transition: opacity 0.4s ease; }
+.album:hover img { transform: scale(1); }
+.album:hover::after { opacity: 0.55; }
+.album--plain::after { display: none; }
+.album--plain:hover { filter: brightness(1.06); }
+.album > span { position: relative; z-index: 1; }
+.album__year { font-family: var(--df-display); font-weight: 700; font-size: clamp(56px, 7vw, 96px); line-height: 0.9; letter-spacing: -0.04em; }
+.album__label { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-family: var(--df-mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+.album--blue { --tone: var(--df-blue); }
+.album--red { --tone: var(--df-red); }
+.album--yellow { --tone: var(--df-yellow); color: var(--df-ink); }
+.album--yellow:hover { color: var(--df-ink); }
+.album--green { --tone: var(--df-green); }
+.album--ink { --tone: var(--df-ink); }
 
 /* Venue */
 .map-frame { position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--df-ink); background: var(--df-hatch); overflow: hidden; }

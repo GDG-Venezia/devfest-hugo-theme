@@ -15,7 +15,7 @@
         {{ if and $cfp.enable (ne $cta.url $cfp.buttonTarget) }}
         <a href="#cfp" class="btn btn--lg">Submit a talk — CFP open</a>
         {{ else }}
-        <a href="{{ "/venue/" | relURL }}" class="btn btn--lg">How to get there</a>
+        <a href="{{ "/#venue" | relURL }}" class="btn btn--lg">How to get there</a>
         {{ end }}
       </div>
     </div>

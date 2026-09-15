@@ -1,15 +1,34 @@
 {{ define "main" }}
 {{ with site.Data.gallery }}
-{{ partial "pageHead.html" (dict "eyebrow" "Photos from past editions" "title" $.Title "lead" .subtitle) }}
-<section>
-  <div class="wrap grid gallery" style="--min: 260px; --gap: clamp(10px, 1.2vw, 16px); padding-block: clamp(24px, 3vw, 44px) clamp(40px, 5vw, 72px)">
-    {{ range .galleryImage }}
-    <figure>
-      <img src="{{ .image | relURL }}" alt="{{ .alt }}" loading="lazy">
-      {{ with .alt }}<figcaption>{{ . }}</figcaption>{{ end }}
-    </figure>
+{{ $tones := slice "blue" "red" "yellow" "green" }}
+{{ partial "pageHead.html" (dict "eyebrow" "Photos from past editions" "title" $.Title "lead" (.albumsSubtitle | default "Every edition has its own photo album. Pick a year.")) }}
+{{ with .albums }}
+<section class="section">
+  <div class="wrap grid" style="--min: 240px; padding-block: clamp(28px, 3vw, 48px)">
+    {{ range $i, $album := . }}
+    <a href="{{ $album.url }}" class="album album--{{ $album.color | default (index $tones (mod $i 4)) }}{{ if not $album.cover }} album--plain{{ end }}" target="_blank" rel="noopener">
+      {{ with $album.cover }}<img src="{{ . | relURL }}" alt="" loading="lazy">{{ end }}
+      <span class="album__year">{{ $album.year }}</span>
+      <span class="album__label"><span>{{ $album.label | default "Photo album" }}</span><span aria-hidden="true">↗</span></span>
+    </a>
     {{ end }}
   </div>
 </section>
+{{ end }}
+{{ with .galleryImage }}
+<section>
+  <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px) clamp(40px, 5vw, 72px)">
+    <h2 class="subhead" style="margin-top: 0">Highlights</h2>
+    <div class="grid gallery" style="--min: 260px; --gap: clamp(10px, 1.2vw, 16px)">
+      {{ range . }}
+      <figure>
+        <img src="{{ .image | relURL }}" alt="{{ .alt }}" loading="lazy">
+        {{ with .alt }}<figcaption>{{ . }}</figcaption>{{ end }}
+      </figure>
+      {{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
 {{ end }}
 {{ end }}
