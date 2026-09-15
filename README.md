@@ -60,7 +60,7 @@ Every block with `enable: false` (or a missing file) is simply not rendered.
 | `partner.yml` | `title`, `partner: [{name, image, link}]` — rendered as the last tier |
 | `travel.yml` | `modes: [{mode, color, headline, detail}]` |
 | `onTheDay.yml` | Cards under "Getting there" on the home page: `title`, `items: [{label, text}]` |
-| `gallery.yml` | `galleryImage: [{image, alt}]` (home + hero mosaic), `albums: [{year, url, website?, cover?, color?}]` (past editions page; a `website` equal to the site's own baseURL is hidden) |
+| `gallery.yml` | `galleryImage: [{image, alt}]` (home "Past editions" photos + hero mosaic), `albums: [{year, url, website?, cover?, color?}]` (past editions page; a `website` equal to the site's own baseURL is hidden) |
 | `cfp.yml` | CFP band: `title`, `subtitle`, `buttonLabel`, `buttonTarget`, optional `deadline` |
 | `ticket.yml` | When enabled, the main call to action becomes "Reserve a seat" (`itemPrices[0].buttonTarget`) |
 | `footer.yml` | `columns: [{title, links: [{label, url}]}]` |

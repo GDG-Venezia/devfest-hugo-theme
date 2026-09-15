@@ -21,20 +21,5 @@
   </div>
 </section>
 {{ end }}
-{{ with .galleryImage }}
-<section>
-  <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px) clamp(40px, 5vw, 72px)">
-    <h2 class="subhead" style="margin-top: 0">Highlights</h2>
-    <div class="grid gallery" style="--min: 260px; --gap: clamp(10px, 1.2vw, 16px)">
-      {{ range . }}
-      <figure>
-        <img src="{{ .image | relURL }}" alt="{{ .alt }}" loading="lazy">
-        {{ with .alt }}<figcaption>{{ . }}</figcaption>{{ end }}
-      </figure>
-      {{ end }}
-    </div>
-  </div>
-</section>
-{{ end }}
 {{ end }}
 {{ end }}
