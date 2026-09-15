@@ -330,16 +330,15 @@ a.live-card:hover { background: #1C1C1C !important; color: var(--df-paper); }
 
 /* My agenda: expectations about local-only saving */
 .saved-note {
-  display: flex; gap: 14px; align-items: flex-start; margin-top: 24px; padding: 18px 20px;
+  display: flex; gap: 12px; align-items: flex-start; margin-top: 24px; padding: 14px 18px;
   background: #FFF6DB; border: 1px solid var(--df-ink); border-left: 6px solid var(--df-yellow);
 }
 .saved-note__icon {
-  flex: 0 0 auto; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  flex: 0 0 auto; display: grid; place-items: center; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%;
   background: var(--df-ink); color: var(--df-paper); font: 700 14px/1 var(--df-display);
 }
-.saved-note__title { font-size: 18px; letter-spacing: -0.01em; line-height: 1.3; }
-.saved-note p { margin-top: 6px; max-width: 70ch; font-size: 15px; line-height: 1.55; color: rgba(16, 16, 16, 0.8); }
-.saved-note__tip { font-size: 14px; }
+.saved-note__title { font-size: 16px; letter-spacing: -0.01em; line-height: 1.3; }
+.saved-note p { margin-top: 4px; max-width: 70ch; font-size: 14px; line-height: 1.55; color: rgba(16, 16, 16, 0.8); }
 .empty-state { padding: 40px 0; text-align: center; }
 .empty-state h3 { font-size: 22px; letter-spacing: -0.02em; }
 .empty-state p { margin-top: 8px; color: var(--df-muted); }
