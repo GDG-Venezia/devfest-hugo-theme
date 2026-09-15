@@ -7,7 +7,7 @@
 }}
 <section class="section section--sand" id="sponsors">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Sponsors & partners") }}
+    {{ partial "sectionHead.html" (dict "title" "Sponsors & partners") }}
     {{ range $tiers }}
     {{ $size := index $sizes (.size | default "md") }}
     <div class="tier">

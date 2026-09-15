@@ -2,7 +2,7 @@
 {{ $talks := where $sessions "service" "!=" true }}
 <section class="section section--ink" id="program">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Program" "link" (cond (gt (len $talks) 0) ("/agenda/" | relURL) "") "linkLabel" "See the full agenda") }}
+    {{ partial "sectionHead.html" (dict "title" "Program" "link" (cond (gt (len $talks) 0) ("/agenda/" | relURL) "") "linkLabel" "See the full agenda") }}
     {{ if $talks }}
     {{- /* Numbers, all derived from data/sessions.yml. */ -}}
     {{ $speakers := slice }}

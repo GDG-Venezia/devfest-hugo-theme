@@ -2,7 +2,7 @@
 {{ with site.Data.feature }}
 <section class="section" id="feature">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" $.num "accent" $.accent "title" .title) }}
+    {{ partial "sectionHead.html" (dict "title" .title) }}
     <div class="grid rules cards-3">
       {{ range $i, $f := .features }}
       <div class="card">

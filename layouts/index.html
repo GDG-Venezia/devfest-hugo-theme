@@ -2,7 +2,7 @@
   {{ partial "hero.html" . }}
   {{ partial "facts.html" . }}
 
-  {{- /* Numbered sections: disabled or empty ones are skipped without leaving gaps. */ -}}
+  {{- /* Disabled or empty sections are skipped. */ -}}
   {{ $sections := slice }}
   {{ with site.Data.feature }}{{ if .enable }}{{ $sections = $sections | append "feature" }}{{ end }}{{ end }}
   {{ $sections = $sections | append "program" }}
@@ -10,13 +10,8 @@
   {{ $sections = $sections | append "sponsors" "location" }}
   {{ with site.Data.gallery }}{{ if .enable }}{{ $sections = $sections | append "gallery" }}{{ end }}{{ end }}
 
-  {{ $accents := slice "blue" "yellow" "red" "green" }}
-  {{ range $i, $name := $sections }}
-    {{ partial (printf "home/%s.html" $name) (dict
-      "page" $
-      "num" (printf "%02d" (add $i 1))
-      "accent" (index $accents (mod $i 4))
-    ) }}
+  {{ range $sections }}
+    {{ partial (printf "home/%s.html" .) (dict "page" $) }}
   {{ end }}
 
   {{ partial "cfpSection.html" . }}

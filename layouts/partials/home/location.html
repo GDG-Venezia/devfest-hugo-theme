@@ -1,6 +1,6 @@
 <section class="section" id="venue">
   <div class="wrap">
-    {{ partial "sectionHead.html" (dict "num" .num "accent" .accent "title" "Getting there") }}
+    {{ partial "sectionHead.html" (dict "title" "Getting there") }}
     {{ partial "venueBlock.html" .page }}
     {{ with site.Data.onTheDay }}{{ if .enable }}
     <h3 class="subhead">{{ .title }}</h3>

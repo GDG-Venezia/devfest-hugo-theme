@@ -21,10 +21,10 @@
   </div>
   <div class="mobile-menu" id="mobile-menu" hidden>
     <nav aria-label="Mobile">
-      <a class="mobile-menu__item" href="{{ "/" | relURL }}"><span>Home</span><span class="mobile-menu__num">01</span></a>
+      <a class="mobile-menu__item" href="{{ "/" | relURL }}">Home</a>
       {{ range $i, $item := site.Menus.main }}
       <a class="mobile-menu__item" href="{{ $item.URL }}"{{ if or ($current.IsMenuCurrent "main" $item) ($current.HasMenuCurrent "main" $item) }} aria-current="page"{{ end }}>
-        <span>{{ $item.Name }}</span><span class="mobile-menu__num">{{ printf "%02d" (add $i 2) }}</span>
+        {{ $item.Name }}
       </a>
       {{ end }}
     </nav>
