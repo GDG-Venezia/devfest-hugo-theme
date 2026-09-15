@@ -1,0 +1,13 @@
+---
+# Strip under the hero. Keep it to 3–5 short pairs.
+enable: true
+facts:
+  - label: "Date"
+    value: "Sat 23 Oct 2027"
+  - label: "Where"
+    value: "Ca' Foscari, Mestre"
+  - label: "Tickets"
+    value: "Free — registration required"
+  - label: "Scale"
+    value: "500+ attendees · 4 tracks"
+---

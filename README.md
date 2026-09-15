@@ -22,6 +22,30 @@ For local development against a checkout of this repo next to the sites:
 hugo server --themesDir ..
 ```
 
+## Example site
+
+`exampleSite/` is a complete, fictional edition that uses every option: all data files (with comments),
+three speakers, a sponsor page, a timetable with a workshop spanning two slots, and placeholder images.
+Preview it from this repo:
+
+```bash
+cd exampleSite && hugo server --themesDir ../..
+```
+
+## Starting a new edition
+
+1. Create the site repo and copy `exampleSite/` into it (config, `data/`, `content/`, `static/`).
+2. Point it at this theme (`theme = "devfest-hugo-theme"`) and run `hugo server --themesDir ..`
+   with this repo checked out next to it.
+3. Update `config.toml`: `baseURL`, `title`, `params.description`, `params.logo`, venue.
+4. Update the data files top to bottom: `hero`, `facts`, `feature`, `cfp`, `sponsor`, `partner`,
+   `travel`, `onTheDay`, `gallery` (add last year's album and website), `footer`.
+5. Until the programme is public, set `enable: false` in `sessions.yml`; the site shows `comingSoon.yml`.
+6. When the schedule is ready, fill `sessions.yml` and add one `content/speakers/<slug>.md` per speaker.
+   Check the live view with `/?now=<event date>T11:00:00%2B02:00`.
+7. Replace the placeholder images in `static/images/` and delete example speakers and sponsors.
+8. Re-check travel info and every external link: it changes from year to year.
+
 ## Site config
 
 ```toml

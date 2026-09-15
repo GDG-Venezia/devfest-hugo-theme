@@ -1,0 +1,31 @@
+---
+# Home "Sponsors & partners" section. Tiers render in order.
+# size: lg | md | sm (logo size). color: blue | red | yellow | green | ink
+# link: a sponsor page ("sponsors/acme", from content/sponsors/acme.md) or an external URL.
+enable: true
+tiers:
+  - name: "Main sponsor"
+    color: "yellow"
+    size: "lg"
+    sponsors:
+      - name: "Acme Cloud"
+        image: "images/sponsors/acme.svg"
+        link: "sponsors/acme"
+  - name: "Sponsors"
+    color: "blue"
+    size: "md"
+    sponsors:
+      - name: "Globex"
+        image: "images/sponsors/globex.svg"
+        link: "https://example.com/"
+      - name: "Initech"
+        image: "images/sponsors/initech.svg"
+        link: "https://example.com/"
+# Optional "Become a sponsor" box at the end of the section.
+cta:
+  enable: true
+  title: "Become a sponsor"
+  subtitle: "Meet 500+ developers at your booth and support the local tech community."
+  buttonLabel: "Get in touch"
+  buttonTarget: "mailto:hello@example.org"
+---

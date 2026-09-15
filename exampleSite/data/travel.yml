@@ -1,0 +1,17 @@
+---
+# "Getting there" cards next to the map on the home page. Verify every line each year.
+enable: true
+modes:
+  - mode: "Closest station"
+    color: "green"
+    headline: "Venezia Porto Marghera, 15 min on foot"
+    detail: "About 1 km from the campus. Only some regional trains stop there."
+  - mode: "Main station"
+    color: "blue"
+    headline: "Venezia Mestre, 30 min on foot or a short bus ride"
+    detail: "Urban buses go to the \"Torino Università\" stop in front of the campus."
+  - mode: "By car"
+    color: "red"
+    headline: "Close to the Mestre ring road"
+    detail: "Parking near the campus is limited: arrive early."
+---

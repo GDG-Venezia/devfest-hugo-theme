@@ -1,0 +1,42 @@
+# Example DevFest site. Copy this folder to start a new edition, then replace every value.
+baseURL = "https://devfest27.example.org/"
+languageCode = "en"
+title = "DevFest Venezia 27"
+theme = "devfest-hugo-theme"
+
+[pagination]
+  pagerSize = 6
+
+# Header navigation. Agenda, Speakers and Past editions are pages; Sponsors and Venue
+# jump to sections of the home page.
+[[menu.main]]
+name = "Agenda"
+pageRef = "/agenda"
+weight = 1
+[[menu.main]]
+name = "Speakers"
+pageRef = "/speakers"
+weight = 2
+[[menu.main]]
+name = "Sponsors"
+url = "/#sponsors"
+weight = 3
+[[menu.main]]
+name = "Venue"
+url = "/#venue"
+weight = 4
+[[menu.main]]
+name = "Past editions"
+pageRef = "/gallery"
+weight = 5
+
+[params]
+  description = "DevFest Venezia 2027 - 23 October - Venezia"
+  logo = "images/logo.svg"                       # header and footer logo
+  copyright = "© {year} GDG Venezia"             # {year} becomes the current year; HTML allowed
+  footerDescription = "Organized by <a href=\"https://gdg.community.dev/gdg-venezia/\" target=\"_blank\">Google Developer Group Venezia</a>."
+
+  [params.location.venezia]
+  address = "Campus Scientifico Università Ca' Foscari"
+  desc = "Via Torino, 155 Mestre, Venezia VE, 30170"
+  mapsLink = "https://www.google.com/maps/dir//Via%20Torino%2C%20155%20Mestre%2C%20Venezia%20VE"

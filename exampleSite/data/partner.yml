@@ -1,0 +1,9 @@
+---
+# Shown as the last group of the sponsors section.
+enable: true
+title: "Partners"
+partner:
+  - name: "Example University"
+    image: "images/partners/university.svg"
+    link: "https://example.com/"
+---

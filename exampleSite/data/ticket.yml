@@ -1,0 +1,7 @@
+---
+# When enabled, "Reserve a seat" becomes the main button (header, hero, mobile menu).
+enable: false
+buttonLabel: "Reserve your free seat"
+itemPrices:
+  - buttonTarget: "https://gdg.community.dev/gdg-venezia/"
+---

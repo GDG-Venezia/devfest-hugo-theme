@@ -1,0 +1,107 @@
+---
+# Agenda, talk pages, program numbers and track cards, live bar and "Now & next".
+# Set enable: false until the programme is public (comingSoon.yml is shown instead).
+enable: true
+date: "2027-10-23"
+timezone: "Europe/Rome"
+
+# One column per track in the timetable. color: blue | red | yellow | green | ink
+tracks:
+  - name: "Mobile"
+    color: "green"
+  - name: "Web"
+    color: "yellow"
+  - name: "AI"
+    color: "red"
+  - name: "Workshop"                            # a track name containing "Workshop" counts as workshops
+    color: "blue"
+
+sessions:
+  # service: true → no talk page, no Save button, spans all tracks (check-in, breaks, keynotes)
+  - id: "check-in"
+    title: "Check-in"
+    start: "08:30"
+    end: "09:00"
+    room: "Atrium"
+    service: true
+  - id: "opening-keynote"
+    title: "Opening keynote"
+    start: "09:00"
+    end: "09:30"
+    room: "All rooms"
+    service: true
+
+  # id becomes the URL: /agenda/<id>/
+  - id: "compose-in-production"
+    title: "Compose Multiplatform in production"
+    start: "09:45"
+    end: "10:30"
+    room: "Aula Alfa"
+    track: "Mobile"
+    lang: "ENG"
+    level: "Intermediate"
+    speakers: ["jane-doe"]                       # file names in content/speakers/, without .md
+    abstract: >
+      What we shipped, what we rewrote, and what we would do differently. **Markdown** is allowed.
+  - id: "web-performance-budgets"
+    title: "Performance budgets people actually follow"
+    start: "09:45"
+    end: "10:30"
+    room: "Aula Beta"
+    track: "Web"
+    lang: "ITA"
+    level: "Beginner"
+    speakers: ["mario-rossi"]
+    abstract: "Core Web Vitals as a team habit instead of a dashboard."
+  - id: "evaluating-llm-features"
+    title: "Evaluating LLM features before users do"
+    start: "09:45"
+    end: "10:30"
+    room: "Aula Gamma"
+    track: "AI"
+    lang: "ENG"
+    level: "Advanced"
+    speakers: ["alex-smith", "jane-doe"]         # several speakers
+    abstract: "Building an evaluation loop that survives contact with real users."
+  # A workshop running across two talk slots: it spans both rows in the timetable.
+  - id: "build-an-agent"
+    title: "Hands-on: build your first agent"
+    start: "09:45"
+    end: "11:15"
+    room: "Lab 1"
+    track: "Workshop"
+    lang: "ENG"
+    level: "Beginner"
+    speakers: ["alex-smith"]
+    abstract: "Bring a laptop. We start from an empty project and finish with a working agent."
+  - id: "offline-first-apps"
+    title: "Offline-first apps without the pain"
+    start: "10:30"
+    end: "11:15"
+    room: "Aula Alfa"
+    track: "Mobile"
+    lang: "ITA"
+    speakers: ["mario-rossi"]
+    abstract: "Sync, conflicts and testing strategies for apps that must work on a train."
+  - id: "css-that-scales"
+    title: "CSS that scales with your team"
+    start: "10:30"
+    end: "11:15"
+    room: "Aula Beta"
+    track: "Web"
+    lang: "ENG"
+    speakers: ["jane-doe"]
+    abstract: "Tokens, layers and conventions that keep a design system maintainable."
+  - id: "break"
+    title: "Coffee break"
+    start: "11:15"
+    end: "11:45"
+    room: "Atrium"
+    service: true
+  - id: "closing-keynote"
+    title: "Closing keynote"
+    start: "11:45"
+    end: "12:30"
+    room: "All rooms"
+    service: true
+---

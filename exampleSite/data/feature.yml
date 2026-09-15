@@ -1,0 +1,18 @@
+---
+# "What is DevFest" cards on the home page. Six cards fill two rows of three.
+enable: true
+title: "What is DevFest Venice?"
+features:
+  - name: "DevFest"
+    description: "Community events organized by Google Developer Groups, focused on learning, building and meeting other developers."
+  - name: "Google Developer Group"
+    description: "GDG Venezia is a group of developers interested in Google technologies: Android, Web, Cloud, AI and more."
+  - name: "When?"
+    description: "Saturday 23 October 2027, from 9:00 to 18:30."
+  - name: "500+ people"
+    description: "Developers, students and companies from the region and beyond."
+  - name: "4 tracks"
+    description: "Talks in English and Italian, plus hands-on workshops."
+  - name: "Meet the companies"
+    description: "Talk to engineering teams at their booths and discover open roles."
+---

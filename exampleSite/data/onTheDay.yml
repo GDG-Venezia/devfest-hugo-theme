@@ -1,0 +1,12 @@
+---
+# Cards under "Getting there" on the home page.
+enable: true
+title: "On the day"
+items:
+  - label: "Registration"
+    text: "Doors open at 8:30. Bring the QR code from your ticket email."
+  - label: "Lunch"
+    text: "Included with the ticket."
+  - label: "Code of conduct"
+    text: "The community guidelines apply to everyone, everywhere on site."
+---

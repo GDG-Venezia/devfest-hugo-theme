@@ -1,0 +1,7 @@
+---
+enable: true
+eyebrow: "Saturday 23 October 2027"            # small pill above the title
+title: "DevFest<br>Venezia"                     # HTML allowed
+subtitle: >
+  The annual community conference of GDG Venezia. One day, multiple tracks and 500+ developers.
+---

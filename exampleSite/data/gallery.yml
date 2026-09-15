@@ -1,0 +1,23 @@
+---
+enable: true
+# Photos for the hero tiles and the "Past editions" strip on the home page.
+galleryImage:
+  - image: "images/past/photo-1.svg"
+    alt: "Keynote — previous edition"
+  - image: "images/past/photo-2.svg"
+    alt: "Hallway track — previous edition"
+  - image: "images/past/photo-3.svg"
+    alt: "Workshop — previous edition"
+# Cards on the Past editions page. website and cover are optional; a website equal to
+# this site's baseURL is hidden automatically.
+albums:
+  - year: 2026
+    url: "https://photos.app.goo.gl/example"
+    website: "https://devfest26.gdgvenezia.it/"
+    cover: "images/past/photo-1.svg"
+  - year: 2025
+    url: "https://photos.app.goo.gl/1CvC1bC3aX8kfaRm9"
+    website: "https://devfest25.gdgvenezia.it/"
+  - year: 2017
+    url: "https://photos.app.goo.gl/i1k3xOYDkgdikyo32"
+---

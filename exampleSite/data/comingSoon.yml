@@ -1,0 +1,7 @@
+---
+# Shown in place of the agenda and program while sessions.yml is disabled or empty.
+enable: true
+eyebrow: "Program 2027"
+title: "Speakers & agenda coming soon"
+subtitle: "We are preparing this year's lineup. Check back soon for speakers, sessions and the full schedule."
+---

@@ -1,0 +1,10 @@
+---
+# Blue "call for papers" band at the bottom of the home page.
+# While tickets are closed, this is also the main button in the header and hero.
+enable: true
+title: "Speak at DevFest Venezia 2027"
+subtitle: "The Call for Papers is open. Share your expertise with the Venice developer community."
+buttonLabel: "Submit your talk"
+buttonTarget: "https://sessionize.com/"
+deadline: "30 June 2027"                         # optional
+---

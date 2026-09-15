@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="144" viewBox="0 0 500 144">
+<rect x="4" y="4" width="40" height="136" rx="10" fill="#F9AB00" stroke="#101010" stroke-width="4"/>
+<rect x="456" y="4" width="40" height="136" rx="10" fill="#F9AB00" stroke="#101010" stroke-width="4"/>
+<text x="250" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="64" fill="#101010">DevFest</text>
+<rect x="110" y="96" width="280" height="36" rx="18" fill="#fff" stroke="#101010" stroke-width="3"/>
+<text x="250" y="121" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#101010">Your city</text>
+</svg>
