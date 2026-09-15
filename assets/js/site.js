@@ -58,9 +58,9 @@ function initAgenda() {
           (activeFilter === "saved" ? saved.has(card.dataset.id) : card.dataset.track === activeFilter);
         card.hidden = !show;
         if (show) slotVisible++;
+        if (show && !card.hasAttribute("data-service")) visible++;
       });
       slot.hidden = slotVisible === 0;
-      visible += slotVisible;
     });
     const count = document.querySelector("[data-result-count]");
     if (count) count.textContent = String(visible);

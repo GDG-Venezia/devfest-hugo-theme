@@ -1,6 +1,6 @@
   <head>
     <meta charset="utf-8" />
-    <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+    <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Params.name | default .Title }} · {{ site.Title }}{{ end }}</title>
 
     {{ "<!--Meta For No Index-->" | safeHTML }}
     <meta name="robots" content="noindex, Nofollow, Noimageindex">

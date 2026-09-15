@@ -16,7 +16,7 @@
     <button type="button" class="btn" aria-pressed="false" data-track-filter="{{ .name }}">{{ .name }}</button>
     {{ end }}
     <button type="button" class="btn" aria-pressed="false" data-track-filter="saved">My agenda</button>
-    <span class="mono filter-bar__count"><span data-result-count>{{ len $sessions }}</span> sessions</span>
+    <span class="mono filter-bar__count"><span data-result-count>{{ len (where $sessions "service" "!=" true) }}</span> sessions</span>
   </div>
 </div>
 

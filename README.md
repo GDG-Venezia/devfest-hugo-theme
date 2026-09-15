@@ -105,4 +105,6 @@ twitter: "…"
 website: "…"
 ```
 
+Note: Hugo reserves `lang` in front matter; use `talkLang` for the talk language when a speaker has no scheduled session.
+
 The body is the bio (a `bio` front matter field also works).

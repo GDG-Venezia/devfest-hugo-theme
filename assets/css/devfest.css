@@ -39,6 +39,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+[hidden] { display: none !important; }
 img { max-width: 100%; display: block; }
 a { color: var(--df-ink); text-decoration: none; }
 a:hover { color: var(--df-blue); }
@@ -251,7 +252,7 @@ p { margin: 0; }
 .speaker-detail__aside { max-width: 420px; }
 .speaker-detail h1 { margin-top: 10px; font-weight: 700; font-size: clamp(32px, 4.4vw, 60px); letter-spacing: -0.035em; line-height: 1; }
 .speaker-detail__role { margin-top: 10px; font-size: 18px; color: var(--df-muted); }
-.speaker-detail__bio { margin-top: 22px; max-width: 62ch; line-height: 1.65; color: rgba(16, 16, 16, 0.8); }
+.speaker-detail__bio { overflow-wrap: anywhere; margin-top: 22px; max-width: 62ch; line-height: 1.65; color: rgba(16, 16, 16, 0.8); }
 .speaker-detail__bio p + p { margin-top: 1em; }
 .socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
 .socials .btn { min-height: 36px; padding: 8px 14px; font-size: 13px; font-weight: 500; }
@@ -274,7 +275,6 @@ p { margin: 0; }
   display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: clamp(10px, 1.2vw, 16px);
   padding: 24px 0; border-bottom: 1px solid var(--df-line);
 }
-.slot[hidden] { display: none; }
 .slot__time { display: flex; flex-direction: column; gap: 4px; }
 .slot__sessions { --gap: clamp(10px, 1.2vw, 16px); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
 @media (max-width: 600px) {
@@ -295,7 +295,6 @@ p { margin: 0; }
 .session-card__foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 10px; border-top: 1px solid rgba(16, 16, 16, 0.14); }
 .session-card__track { font-family: var(--df-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--accent); }
 .session-card .btn { position: relative; z-index: 1; }
-.session-card[hidden] { display: none; }
 
 /* Talk detail */
 .talk h1 { margin-top: 20px; max-width: 22ch; font-weight: 700; font-size: clamp(30px, 4.2vw, 58px); letter-spacing: -0.035em; line-height: 1.02; text-wrap: balance; }
@@ -346,7 +345,7 @@ a.logo-cell:hover { background: #FFFDF5; color: var(--df-ink); }
 .band__note { font-family: var(--df-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
 
 /* Prose (blog, sponsor pages) */
-.prose { max-width: 68ch; line-height: 1.7; color: rgba(16, 16, 16, 0.82); }
+.prose { overflow-wrap: anywhere; max-width: 68ch; line-height: 1.7; color: rgba(16, 16, 16, 0.82); }
 .prose > * + * { margin-top: 1em; }
 .prose a { color: var(--df-blue); text-decoration: underline; text-underline-offset: 3px; }
 .prose h2 { margin-top: 1.6em; font-size: 26px; letter-spacing: -0.02em; color: var(--df-ink); }

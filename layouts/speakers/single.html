@@ -34,7 +34,7 @@
       {{ with .Params.presentation }}
       <h2 class="mono" style="margin: 32px 0 14px; font-weight: 500">Session</h2>
       <div class="session-link">
-        {{ with $.Params.lang }}<span class="session-link__meta">{{ . }}</span>{{ end }}
+        {{ with $.Params.talkLang }}<span class="session-link__meta">{{ . }}</span>{{ end }}
         <span class="session-link__title">{{ .title }}</span>
         {{ with .abstract }}<div class="speaker-detail__bio" style="margin-top: 4px">{{ . | markdownify }}</div>{{ end }}
       </div>
