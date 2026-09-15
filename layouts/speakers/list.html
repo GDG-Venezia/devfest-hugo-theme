@@ -2,13 +2,13 @@
 {{ $speakers := .RegularPages.ByParam "weight" }}
 {{ $tracks := partial "functions/speakerTracks.html" . }}
 {{ partial "pageHead.html" (dict
-  "eyebrow" (cond (gt (len $speakers) 0) (printf "%d speakers · 2026 edition" (len $speakers)) "2026 edition")
+  "eyebrow" (cond (gt (len $speakers) 0) (printf "%d speakers · %s" (len $speakers) site.Title) site.Title)
   "title" .Title
 ) }}
 <section>
   <div class="wrap" style="padding-block: clamp(28px, 3vw, 48px) clamp(40px, 5vw, 72px)">
     {{ if $speakers }}
-    <div class="grid" style="--min: 200px; --gap: clamp(12px, 1.4vw, 24px)">
+    <div class="speaker-grid">
       {{ range $speakers }}
       {{ partial "speakerCard.html" (dict "page" . "track" (index $tracks .File.ContentBaseName)) }}
       {{ end }}

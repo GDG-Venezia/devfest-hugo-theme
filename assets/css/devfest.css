@@ -271,7 +271,21 @@ p { margin: 0; }
   border-radius: 999px; padding: 3px 9px; font-family: var(--df-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--df-ink);
 }
 .speaker-card__name { padding-top: 12px; font-family: var(--df-display); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
-.speaker-card__role { margin-top: 3px; font-size: 13px; color: var(--df-faint); }
+.speaker-card__role {
+  margin-top: 3px; font-size: 13px; color: var(--df-faint);
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;
+}
+/* Fixed column counts keep rows even: 4/3/2 on the speakers page, one row of 6 (3×2, 2×3) on the home page. */
+.speaker-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
+.speaker-grid--row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+@media (max-width: 1100px) {
+  .speaker-grid, .speaker-grid--row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .speaker-grid, .speaker-grid--row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; }
+  .speaker-card__name { font-size: 15px; }
+  .speaker-card__role { font-size: 12px; }
+}
 .speaker-card__track { margin-top: 8px; font-family: var(--df-mono); font-size: 11px; letter-spacing: 0.06em; color: var(--accent); }
 
 .speaker-detail > .wrap { padding-block: clamp(20px, 2.6vw, 36px) clamp(32px, 4vw, 56px); --min: 260px; --gap: clamp(20px, 3vw, 48px); align-items: start; }
