@@ -328,17 +328,40 @@ a.live-card:hover { background: #1C1C1C !important; color: var(--df-paper); }
 .filter-bar .btn { min-height: 36px; padding: 8px 15px; font-size: 13px; font-weight: 500; }
 .filter-bar__count { margin-left: auto; }
 
-.slot {
-  display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: clamp(10px, 1.2vw, 16px);
-  padding: 24px 0; border-bottom: 1px solid var(--df-line);
+/* Agenda timetable */
+.agenda-grid {
+  display: grid; grid-template-columns: 88px repeat(var(--columns, 1), minmax(0, 1fr));
+  gap: 12px; padding-top: 24px; align-items: stretch;
 }
-.slot__time { display: flex; flex-direction: column; gap: 4px; }
-.slot__sessions { --gap: clamp(10px, 1.2vw, 16px); grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-@media (max-width: 600px) {
-  .slot { grid-template-columns: 1fr; }
+.agenda-grid__corner { grid-row: 1; grid-column: 1; }
+.agenda-grid__head { grid-row: 1; display: flex; flex-direction: column; gap: 4px; padding: 0 0 12px; border-bottom: 4px solid var(--accent); }
+.agenda-grid__head strong { font-family: var(--df-display); font-size: 20px; letter-spacing: -0.02em; }
+.agenda-grid__time { grid-column: 1; padding-top: 14px; border-top: 1px solid var(--df-line); }
+.agenda-grid__time strong { font-family: var(--df-display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; }
+.agenda-grid__cell { display: flex; min-width: 0; }
+.agenda-grid__cell--full { grid-column: 2 / -1; }
+/* In the timetable the column header already names the track and room. */
+@media (min-width: 901px) {
+  .agenda-grid:not(.is-list) .session-card__foot { justify-content: flex-end; }
+  .agenda-grid:not(.is-list) .session-card__track { display: none; }
 }
-.slot__time strong { font-family: var(--df-display); font-weight: 700; font-size: clamp(22px, 2.2vw, 30px); letter-spacing: -0.02em; }
+.agenda-grid__cell > .session-card { flex: 1; }
+.session-card--service { border-top-width: 1px; background: var(--df-sand); padding-block: 12px; gap: 4px; }
+.session-card--service .session-card__title { font-size: 16px; }
 
+/* Phones, and any filtered view: a chronological list. */
+@media (max-width: 900px) {
+  .agenda-grid { display: flex; flex-direction: column; gap: 10px; }
+}
+.agenda-grid.is-list { display: flex; flex-direction: column; gap: 10px; }
+.agenda-grid.is-list .agenda-grid__head, .agenda-grid.is-list .agenda-grid__corner { display: none; }
+@media (max-width: 900px) {
+  .agenda-grid__head, .agenda-grid__corner { display: none; }
+}
+.agenda-grid.is-list .agenda-grid__time { margin-top: 14px; }
+@media (max-width: 900px) {
+  .agenda-grid__time { margin-top: 14px; }
+}
 .session-card {
   position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px; min-width: 0;
   border: 1px solid var(--df-ink); border-top: 6px solid var(--accent, var(--df-ink)); background: var(--df-paper);

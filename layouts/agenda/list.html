@@ -12,9 +12,9 @@
   <div class="wrap">
     <span class="mono" style="margin-right: 4px">Track</span>
     <button type="button" class="btn" aria-pressed="true" data-track-filter="All">All</button>
-    {{ range $data.tracks }}
+    {{ range $data.tracks }}{{ if where $sessions "track" .name }}
     <button type="button" class="btn" aria-pressed="false" data-track-filter="{{ .name }}">{{ .name }}</button>
-    {{ end }}
+    {{ end }}{{ end }}
     <button type="button" class="btn" aria-pressed="false" data-track-filter="saved">My agenda</button>
     <span class="mono filter-bar__count"><span data-result-count>{{ len (where $sessions "service" "!=" true) }}</span> sessions</span>
   </div>
@@ -22,20 +22,41 @@
 
 <section>
   <div class="wrap" style="padding-bottom: clamp(40px, 5vw, 72px)">
+    {{- /* Timetable: one column per track, one row per start time. A session spans every row until
+           its end, and sessions without a track (check-in, breaks, keynotes) span all columns. */ -}}
     {{ $starts := slice }}
     {{ range $sessions }}{{ if not (in $starts .start) }}{{ $starts = $starts | append .start }}{{ end }}{{ end }}
-    {{ range $start := $starts }}
-      {{ $slot := where $sessions "start" $start }}
-      <div class="slot" data-slot>
-        <div class="slot__time">
-          <strong>{{ $start }}</strong>
-          <span class="mono">{{ if eq (len $slot) 1 }}{{ (index $slot 0).minutes }} min{{ else }}{{ len $slot }} parallel{{ end }}</span>
-        </div>
-        <div class="grid slot__sessions">
-          {{ range $slot }}{{ partial "sessionCard.html" . }}{{ end }}
-        </div>
+    {{ $columns := slice }}
+    {{ range $data.tracks }}{{ if where $sessions "track" .name }}{{ $columns = $columns | append . }}{{ end }}{{ end }}
+    {{ $lastRow := add (len $starts) 2 }}
+
+    <div class="agenda-grid" style="--columns: {{ len $columns }}" data-agenda-grid>
+      <div class="agenda-grid__corner" aria-hidden="true"></div>
+      {{ range $i, $column := $columns }}
+      {{ $rooms := slice }}
+      {{ range where $sessions "track" $column.name }}{{ with .room }}{{ if not (in $rooms .) }}{{ $rooms = $rooms | append . }}{{ end }}{{ end }}{{ end }}
+      <div class="agenda-grid__head" style="grid-column: {{ add $i 2 }}; --accent: var(--df-{{ $column.color }})">
+        <strong>{{ $column.name }}</strong>
+        {{ with $rooms }}<span class="mono">{{ delimit . ", " }}</span>{{ end }}
       </div>
-    {{ end }}
+      {{ end }}
+
+      {{ range $r, $start := $starts }}
+      {{ $row := add $r 2 }}
+      <div class="agenda-grid__time" style="grid-row: {{ $row }}" data-time="{{ $start }}"><strong>{{ $start }}</strong></div>
+      {{ range where $sessions "start" $start }}
+        {{ $end := .end }}
+        {{ $endRow := $lastRow }}
+        {{ range $k, $next := $starts }}{{ if and (ge $next $end) (eq $endRow $lastRow) }}{{ $endRow = add $k 2 }}{{ end }}{{ end }}
+        {{ $column := 0 }}
+        {{ $track := .track }}
+        {{ range $i, $c := $columns }}{{ if and $track (eq $c.name $track) }}{{ $column = add $i 2 }}{{ end }}{{ end }}
+        <div class="agenda-grid__cell{{ if not $column }} agenda-grid__cell--full{{ end }}" style="grid-row: {{ $row }} / {{ $endRow }};{{ with $column }} grid-column: {{ . }};{{ end }}" data-cell data-start="{{ $start }}">
+          {{ partial "sessionCard.html" . }}
+        </div>
+      {{ end }}
+      {{ end }}
+    </div>
     <p class="muted" data-empty-state hidden style="padding: 32px 0">No sessions here yet. Use “Save” on a session to add it to your agenda.</p>
   </div>
 </section>

@@ -48,20 +48,24 @@ function initAgenda() {
 
   const applyFilter = () => {
     if (!filterBar) return;
+    const grid = document.querySelector("[data-agenda-grid]");
     let visible = 0;
-    document.querySelectorAll("[data-slot]").forEach((slot) => {
-      let slotVisible = 0;
-      slot.querySelectorAll("[data-session]").forEach((card) => {
-        const show =
-          activeFilter === "All" ||
-          (card.hasAttribute("data-service") && activeFilter !== "saved") ||
-          (activeFilter === "saved" ? saved.has(card.dataset.id) : card.dataset.track === activeFilter);
-        card.hidden = !show;
-        if (show) slotVisible++;
-        if (show && !card.hasAttribute("data-service")) visible++;
-      });
-      slot.hidden = slotVisible === 0;
+    const visibleStarts = new Set();
+    document.querySelectorAll("[data-cell]").forEach((cell) => {
+      const card = cell.querySelector("[data-session]");
+      const show =
+        activeFilter === "All" ||
+        (card.hasAttribute("data-service") && activeFilter !== "saved") ||
+        (activeFilter === "saved" ? saved.has(card.dataset.id) : card.dataset.track === activeFilter);
+      cell.hidden = !show;
+      if (show) visibleStarts.add(cell.dataset.start);
+      if (show && !card.hasAttribute("data-service")) visible++;
     });
+    document.querySelectorAll("[data-time]").forEach((time) => {
+      time.hidden = !visibleStarts.has(time.dataset.time);
+    });
+    // A timetable with most cells hidden reads badly: filtered views become a list.
+    grid?.classList.toggle("is-list", activeFilter !== "All");
     const count = document.querySelector("[data-result-count]");
     if (count) count.textContent = String(visible);
     const empty = document.querySelector("[data-empty-state]");
