@@ -16,6 +16,18 @@
     </div>
     {{ end }}
   </div>
+  {{ with site.Data.footer.socials }}
+  <div class="site-footer__socials">
+    <div class="wrap">
+      <span class="mono">{{ site.Data.footer.socialsTitle | default "Follow GDG Venezia" }}</span>
+      <ul>
+        {{ range . }}
+        <li><a href="{{ .url }}" target="_blank" rel="noopener">{{ .label }} <span aria-hidden="true">↗</span></a></li>
+        {{ end }}
+      </ul>
+    </div>
+  </div>
+  {{ end }}
   <div class="site-footer__legal">
     <div class="wrap">
       <span>{{ replace site.Params.copyright "{year}" (string now.Year) | safeHTML }}</span>
