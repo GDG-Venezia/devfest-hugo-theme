@@ -24,7 +24,7 @@
       {{ $photos := slice }}
       {{ with site.Data.gallery }}{{ if .enable }}{{ range .galleryImage }}{{ $photos = $photos | append .image }}{{ end }}{{ end }}{{ end }}
       <div class="mosaic">
-        {{ range $i, $tone := slice "blue" "ink" "yellow" "paper" "green" "red" "paper" "ink" }}
+        {{ range $i, $tone := slice "blue" "red" "yellow" "green" "green" "blue" "red" "red" }}
         <span class="mosaic__tile mosaic__tile--{{ $tone }}">
           {{ with $photos }}<img src="{{ index . (mod $i (len .)) | relURL }}" alt="">{{ end }}
         </span>
