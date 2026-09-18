@@ -1,0 +1,27 @@
+{{ define "main" }}
+{{ with site.Data.follow }}
+{{ partial "pageHead.html" (dict
+  "eyebrow" (.eyebrow | default site.Params.description)
+  "title" $.Title
+  "lead" .subtitle
+) }}
+<section class="section">
+  <div class="wrap" style="padding-bottom: clamp(40px, 5vw, 72px)">
+    {{ with .channels }}
+    <div class="follow-grid">
+      {{- range . -}}
+      <a href="{{ .url }}" class="follow-card" target="_blank" rel="noopener">
+        <span>
+          <span class="follow-card__label">{{ .label }}</span>
+          {{ with .description }}<span class="follow-card__desc">{{ . }}</span>{{ end }}
+        </span>
+        <span class="follow-card__arrow" aria-hidden="true">↗</span>
+      </a>
+      {{- end -}}
+    </div>
+    {{ end }}
+    {{ with $.Content }}<div class="follow-page__note">{{ . }}</div>{{ end }}
+  </div>
+</section>
+{{ end }}
+{{ end }}

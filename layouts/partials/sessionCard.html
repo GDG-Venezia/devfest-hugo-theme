@@ -1,15 +1,21 @@
-{{- /* A session from functions/sessions.html */ -}}
+{{- /* A session from functions/sessions.html. Scheduled sessions have start and end;
+       announced ones (schedule not out yet) show no times and no Save button. */ -}}
 <article class="session-card{{ if .service }} session-card--service{{ end }}" style="--accent: var(--df-{{ .color }})" data-session data-track="{{ .track }}" data-id="{{ .id }}"{{ if .service }} data-service{{ end }}>
+  {{ if or .start .lang }}
   <div class="session-card__meta">
-    <span class="mono">{{ .start }} — {{ .end }}{{ if .service }}{{ with .room }} · {{ . }}{{ end }}{{ end }}</span>
+    {{ with .start }}<span class="mono">{{ . }} — {{ $.end }}</span>{{ end }}
+    {{ if .service }}{{ with .room }}<span class="mono"> · {{ . }}</span>{{ end }}{{ end }}
     {{ with .lang }}<span class="mono">{{ . }}</span>{{ end }}
   </div>
+  {{ end }}
   <h3 class="session-card__title">{{ if .url }}<a href="{{ .url }}">{{ .title }}</a>{{ else }}{{ .title }}{{ end }}</h3>
   {{ with .speakerPages }}<span class="session-card__speaker">{{ partial "speakerNames.html" . }}</span>{{ end }}
   {{ if not .service }}
+  {{ if or .track .start }}
   <div class="session-card__foot">
     <span class="session-card__track">{{ .track }}{{ with .room }} · {{ . }}{{ end }}</span>
-    <button type="button" class="btn btn--sm" aria-pressed="false" data-save="{{ .id }}">Save</button>
+    {{ if .start }}<button type="button" class="btn btn--sm" aria-pressed="false" data-save="{{ .id }}">Save</button>{{ end }}
   </div>
+  {{ end }}
   {{ end }}
 </article>

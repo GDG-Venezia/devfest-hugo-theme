@@ -1,6 +1,8 @@
 {{- /*
   Returns the sessions from data/sessions.yml, sorted by start time and
   enriched with track colour, speaker pages, talk page and absolute times.
+  Sessions without start/end are "announced but not scheduled": they still get
+  speaker pages, talk pages and agenda listing, but no timetable slot.
 */ -}}
 {{- $data := site.Data.sessions -}}
 {{- $out := slice -}}
@@ -8,22 +10,32 @@
   {{- $tz := $data.timezone | default "Europe/Rome" -}}
   {{- $colors := dict -}}
   {{- range $data.tracks }}{{ $colors = merge $colors (dict .name .color) }}{{ end -}}
-  {{- range sort $data.sessions "start" -}}
-    {{- $start := time.AsTime (printf "%sT%s:00" $data.date .start) $tz -}}
-    {{- $end := time.AsTime (printf "%sT%s:00" $data.date .end) $tz -}}
+  {{- $scheduled := slice -}}
+  {{- $unscheduled := slice -}}
+  {{- range $data.sessions -}}
     {{- $speakers := slice -}}
     {{- range .speakers }}{{ with site.GetPage (printf "/speakers/%s" .) }}{{ $speakers = $speakers | append . }}{{ end }}{{ end -}}
     {{- $url := "" -}}
     {{- if not .service }}{{ with site.GetPage (printf "/agenda/%s" .id) }}{{ $url = .RelPermalink }}{{ end }}{{ end -}}
     {{- $s := merge . (dict
         "color" (index $colors (.track | default "") | default "ink")
-        "startTime" $start
-        "endTime" $end
-        "minutes" (int ($end.Sub $start).Minutes)
         "speakerPages" $speakers
         "url" $url
       ) -}}
-    {{- $out = $out | append $s -}}
+    {{- if and .start .end -}}
+      {{- $start := time.AsTime (printf "%sT%s:00" $data.date .start) $tz -}}
+      {{- $end := time.AsTime (printf "%sT%s:00" $data.date .end) $tz -}}
+      {{- $s = merge $s (dict
+          "startTime" $start
+          "endTime" $end
+          "minutes" (int ($end.Sub $start).Minutes)
+        ) -}}
+      {{- $scheduled = $scheduled | append $s -}}
+    {{- else -}}
+      {{- $unscheduled = $unscheduled | append $s -}}
+    {{- end -}}
   {{- end -}}
+  {{- range sort $scheduled "start" }}{{ $out = $out | append . }}{{ end -}}
+  {{- range $unscheduled }}{{ $out = $out | append . }}{{ end -}}
 {{- end -}}
 {{- return $out -}}

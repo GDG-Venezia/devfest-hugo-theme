@@ -86,7 +86,8 @@ Every block with `enable: false` (or a missing file) is simply not rendered.
 | `onTheDay.yml` | Cards under "Getting there" on the home page: `title`, `items: [{label, text}]` |
 | `gallery.yml` | `galleryImage: [{image, alt}]` (home "Past editions" photos + hero mosaic), `albums: [{year, url, website?, cover?, color?}]` (past editions page; a `website` equal to the site's own baseURL is hidden) |
 | `cfp.yml` | CFP band: `title`, `subtitle`, `buttonLabel`, `buttonTarget`, optional `deadline` |
-| `ticket.yml` | When enabled, the main call to action becomes "Reserve a seat" (`itemPrices[0].buttonTarget`) |
+| `ticket.yml` | When enabled, the main call to action becomes "Reserve a seat" (`itemPrices[0].buttonTarget`). While tickets are not ready, `soon: true` turns it into "Tickets open soon" (override with `soonLabel`) linking to `soonTarget` (default `/follow/`) |
+| `follow.yml` | `/follow/` page: optional `subtitle` and `channels: [{label, url, description}]`. Page title comes from the theme's `content/follow/_index.md` |
 | `footer.yml` | `columns: [{title, links: [{label, url}]}]`, optional `socials: [{label, url}]` and `socialsTitle` |
 
 Colours are one of `blue`, `red`, `yellow`, `green`, `ink`.
@@ -128,6 +129,11 @@ sessions:
     service: true                 # no talk page, no save button
 ```
 
+`start`, `end` and `room` are optional. A session without `start`/`end` counts as announced but not
+scheduled: it still gets a talk page and appears on speaker pages and under "Announced talks" on the
+agenda, but not in the timetable, the live bar or "My agenda", and it has no Save button. Add the
+times when the schedule is ready and it becomes a normal session.
+
 ## Speakers (`content/speakers/<slug>.md`)
 
 ```yaml
@@ -135,8 +141,8 @@ name: "Jane Doe"
 role: "Android GDE"               # `jobTitle` also works
 photo: "/images/speakers/jane-doe.webp"
 badge: "GDE"                      # optional
-featured: true                    # shown on the home page
-weight: 1
+featured: true                    # home page picks six of these at random per visit
+weight: 1                         # order on the speakers page; fallback order without JS
 linkedin: "…"
 bluesky: "…"
 github: "…"
@@ -145,5 +151,9 @@ website: "…"
 ```
 
 Note: Hugo reserves `lang` in front matter; use `talkLang` for the talk language when a speaker has no scheduled session.
+
+The home page shows six speakers picked at random on each visit (JS). If any speaker has
+`featured: true`, only those enter the random pool; otherwise all speakers do. Without JS the
+first six by `weight` are shown.
 
 The body is the bio (a `bio` front matter field also works).

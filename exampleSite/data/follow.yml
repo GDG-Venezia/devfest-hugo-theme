@@ -1,0 +1,24 @@
+---
+# Channels shown on the /follow/ page. The "tickets soon" hero CTA
+# (data/ticket.yml: soon: true) links to this page by default.
+subtitle: "Announcements, the ticket drop and photos — pick your channel."
+channels:
+  - label: "LinkedIn"
+    url: "https://www.linkedin.com/company/…"
+    description: "Event announcements."
+  - label: "Meetup"
+    url: "https://www.meetup.com/…"
+    description: "RSVPs and event dates."
+  - label: "Telegram"
+    url: "https://t.me/…"
+    description: "Quick updates."
+  - label: "Instagram"
+    url: "https://www.instagram.com/…"
+    description: "Behind the scenes."
+  - label: "YouTube"
+    url: "https://www.youtube.com/…"
+    description: "Talk recordings."
+  - label: "X"
+    url: "https://x.com/…"
+    description: "Short updates."
+---

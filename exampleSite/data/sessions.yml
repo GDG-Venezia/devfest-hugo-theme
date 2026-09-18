@@ -104,4 +104,13 @@ sessions:
     end: "12:30"
     room: "All rooms"
     service: true
+
+  # Announced but not scheduled yet: no start/end → talk page and "Announced talks"
+  # list on the agenda, but no timetable slot, live-bar entry or Save button.
+  - id: "talk-to-be-scheduled"
+    title: "Talk to be scheduled"
+    track: "Web"
+    lang: "ENG"
+    speakers: ["jane-doe"]
+    abstract: "Announced today; it gets a timetable slot when the schedule is out."
 ---

@@ -1,22 +1,26 @@
 {{ define "main" }}
 {{ $sessions := partial "functions/sessions.html" . }}
 {{ $data := site.Data.sessions }}
+{{ $scheduled := slice }}
+{{ $unscheduled := slice }}
+{{ range $sessions }}{{ if .start }}{{ $scheduled = $scheduled | append . }}{{ else }}{{ $unscheduled = $unscheduled | append . }}{{ end }}{{ end }}
 {{ partial "pageHead.html" (dict
   "eyebrow" (.Params.eyebrow | default site.Params.description)
   "title" .Title
-  "lead" (cond (gt (len $sessions) 0) "Filter by track, and save the talks you want to your agenda on this device." "")
+  "lead" (cond (gt (len $scheduled) 0) "Filter by track, and save the talks you want to your agenda on this device." (cond (gt (len $unscheduled) 0) "The first talks are announced. The full schedule is coming soon." ""))
 ) }}
 
 {{ if $sessions }}
+{{ if $scheduled }}
 <div class="filter-bar" data-agenda-filter>
   <div class="wrap">
     <span class="mono" style="margin-right: 4px">Track</span>
     <button type="button" class="btn" aria-pressed="true" data-track-filter="All">All</button>
-    {{ range $data.tracks }}{{ if where $sessions "track" .name }}
+    {{ range $data.tracks }}{{ if where $scheduled "track" .name }}
     <button type="button" class="btn" aria-pressed="false" data-track-filter="{{ .name }}">{{ .name }}</button>
     {{ end }}{{ end }}
     <button type="button" class="btn" aria-pressed="false" data-track-filter="saved">My agenda</button>
-    <span class="mono filter-bar__count"><span data-result-count>{{ len (where $sessions "service" "!=" true) }}</span> sessions</span>
+    <span class="mono filter-bar__count"><span data-result-count>{{ len (where $scheduled "service" "!=" true) }}</span> sessions</span>
   </div>
 </div>
 
@@ -25,9 +29,9 @@
     {{- /* Timetable: one column per track, one row per start time. A session spans every row until
            its end, and sessions without a track (check-in, breaks, keynotes) span all columns. */ -}}
     {{ $starts := slice }}
-    {{ range $sessions }}{{ if not (in $starts .start) }}{{ $starts = $starts | append .start }}{{ end }}{{ end }}
+    {{ range $scheduled }}{{ if not (in $starts .start) }}{{ $starts = $starts | append .start }}{{ end }}{{ end }}
     {{ $columns := slice }}
-    {{ range $data.tracks }}{{ if where $sessions "track" .name }}{{ $columns = $columns | append . }}{{ end }}{{ end }}
+    {{ range $data.tracks }}{{ if where $scheduled "track" .name }}{{ $columns = $columns | append . }}{{ end }}{{ end }}
     {{ $lastRow := add (len $starts) 2 }}
 
     <aside class="saved-note" data-saved-note hidden aria-live="polite">
@@ -44,7 +48,7 @@
       <div class="agenda-grid__corner" aria-hidden="true"></div>
       {{ range $i, $column := $columns }}
       {{ $rooms := slice }}
-      {{ range where $sessions "track" $column.name }}{{ with .room }}{{ if not (in $rooms .) }}{{ $rooms = $rooms | append . }}{{ end }}{{ end }}{{ end }}
+      {{ range where $scheduled "track" $column.name }}{{ with .room }}{{ if not (in $rooms .) }}{{ $rooms = $rooms | append . }}{{ end }}{{ end }}{{ end }}
       <div class="agenda-grid__head" style="grid-column: {{ add $i 2 }}; --accent: var(--df-{{ $column.color }})">
         <strong>{{ $column.name }}</strong>
         {{ with $rooms }}<span class="mono">{{ delimit . ", " }}</span>{{ end }}
@@ -54,7 +58,7 @@
       {{ range $r, $start := $starts }}
       {{ $row := add $r 2 }}
       <div class="agenda-grid__time" style="grid-row: {{ $row }}" data-time="{{ $start }}"><strong>{{ $start }}</strong></div>
-      {{ range where $sessions "start" $start }}
+      {{ range where $scheduled "start" $start }}
         {{ $end := .end }}
         {{ $endRow := $lastRow }}
         {{ range $k, $next := $starts }}{{ if and (ge $next $end) (eq $endRow $lastRow) }}{{ $endRow = add $k 2 }}{{ end }}{{ end }}
@@ -73,6 +77,18 @@
     </div>
   </div>
 </section>
+{{ end }}
+{{ with $unscheduled }}
+<section class="section">
+  <div class="wrap">
+    <h2 class="mono" style="margin: 0 0 18px; font-weight: 500">Announced talks</h2>
+    {{- /* Talks announced before the schedule is out: no time, no room, no Save button. */ -}}
+    <div class="grid rules" style="--min: 240px">
+      {{ range . }}{{ partial "sessionCard.html" . }}{{ end }}
+    </div>
+  </div>
+</section>
+{{ end }}
 {{ else }}
 <section class="section">
   <div class="wrap">{{ partial "comingSoon.html" . }}</div>

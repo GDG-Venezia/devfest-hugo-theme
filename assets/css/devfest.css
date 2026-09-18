@@ -293,6 +293,8 @@ a.live-card:hover { background: #1C1C1C !important; color: var(--df-paper); }
 /* Fixed column counts keep rows even: 4/3/2 on the speakers page, one row of 6 (3×2, 2×3) on the home page. */
 .speaker-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
 .speaker-grid--row { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+/* Home page: the script picks six at random per visit; without JS the first six by weight show. */
+.speaker-grid--shuffle:not([data-shuffled]) .speaker-card:nth-child(n+7) { display: none; }
 @media (max-width: 1100px) {
   .speaker-grid, .speaker-grid--row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
@@ -306,6 +308,17 @@ a.live-card:hover { background: #1C1C1C !important; color: var(--df-paper); }
 .speaker-detail__aside { max-width: 420px; }
 .speaker-detail h1 { margin-top: 10px; font-weight: 700; font-size: clamp(32px, 4.4vw, 60px); letter-spacing: -0.035em; line-height: 1; }
 .speaker-detail__role { margin-top: 10px; font-size: 18px; color: var(--df-muted); }
+
+/* Follow page */
+.follow-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.6vw, 24px); }
+@media (max-width: 900px) { .follow-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .follow-grid { grid-template-columns: 1fr; } }
+.follow-card { display: flex; align-items: center; justify-content: space-between; gap: 14px; border: 1px solid var(--df-ink); background: var(--df-paper); padding: 16px 18px; }
+.follow-card:hover { background: var(--df-hatch); }
+.follow-card__label { display: block; font-family: var(--df-display); font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
+.follow-card__desc { display: block; margin-top: 3px; font-size: 13px; color: var(--df-muted); }
+.follow-card__arrow { font-size: 18px; }
+.follow-page__note { margin-top: clamp(24px, 3vw, 40px); max-width: 65ch; color: var(--df-muted); }
 .speaker-detail__bio { overflow-wrap: anywhere; margin-top: 22px; max-width: 62ch; line-height: 1.65; color: rgba(16, 16, 16, 0.8); }
 .speaker-detail__bio p + p { margin-top: 1em; }
 .socials { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }

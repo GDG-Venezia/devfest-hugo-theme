@@ -264,6 +264,25 @@ function initLive() {
   setInterval(update, 60_000);
 }
 
+// Home page speakers: a different set of six on every visit.
+function initSpeakerShuffle() {
+  const grid = document.querySelector("[data-speaker-shuffle]");
+  if (!grid) return;
+  const cards = [...grid.children];
+  if (cards.length <= 6) {
+    grid.setAttribute("data-shuffled", "");
+    return;
+  }
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+  cards.forEach((card, i) => { card.hidden = i >= 6; });
+  grid.replaceChildren(...cards);
+  grid.setAttribute("data-shuffled", "");
+}
+
 initMenu();
 initAgenda();
 initLive();
+initSpeakerShuffle();

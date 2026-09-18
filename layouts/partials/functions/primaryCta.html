@@ -1,9 +1,12 @@
-{{- /* Returns the main call to action: tickets when open, otherwise the CFP. */ -}}
+{{- /* Returns the main call to action: tickets when open, a "tickets soon" teaser
+       before they go live, otherwise the CFP. */ -}}
 {{- $cta := dict -}}
 {{- $ticket := site.Data.ticket -}}
 {{- $cfp := site.Data.cfp -}}
 {{- if and $ticket $ticket.enable $ticket.itemPrices -}}
   {{- $cta = dict "label" ($ticket.buttonLabel | default "Reserve your free seat") "shortLabel" "Reserve a seat" "url" (index $ticket.itemPrices 0).buttonTarget -}}
+{{- else if and $ticket $ticket.soon -}}
+  {{- $cta = dict "label" ($ticket.soonLabel | default "Tickets open soon") "shortLabel" "Tickets soon" "url" ($ticket.soonTarget | default "/follow/") -}}
 {{- else if and $cfp $cfp.enable -}}
   {{- $cta = dict "label" ($cfp.buttonLabel | default "Submit your talk") "shortLabel" "Submit a talk" "url" $cfp.buttonTarget -}}
 {{- end -}}

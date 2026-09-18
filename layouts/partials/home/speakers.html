@@ -1,11 +1,13 @@
 {{ $speakers := where site.RegularPages "Section" "speakers" }}
-{{ $featured := where $speakers "Params.featured" true }}
-{{ if not $featured }}{{ $featured = $speakers }}{{ end }}
+{{ $pool := where $speakers "Params.featured" true }}
+{{ if not $pool }}{{ $pool = $speakers }}{{ end }}
+{{- /* The script shuffles the cards and keeps six per visit; without JS the first
+       six by weight are shown (see .speaker-grid--shuffle in the CSS). */ -}}
 <section class="section" id="speakers">
   <div class="wrap">
     {{ partial "sectionHead.html" (dict "title" "Speakers" "link" ("/speakers/" | relURL) "linkLabel" "Meet them all") }}
-    <div class="speaker-grid speaker-grid--row">
-      {{ range first 6 ($featured.ByParam "weight") }}
+    <div class="speaker-grid speaker-grid--row speaker-grid--shuffle" data-speaker-shuffle>
+      {{ range $pool.ByParam "weight" }}
       {{ partial "speakerCard.html" (dict "page" .) }}
       {{ end }}
     </div>

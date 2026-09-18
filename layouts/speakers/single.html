@@ -25,8 +25,12 @@
       {{ with $sessions }}
       <h2 class="mono" style="margin: 32px 0 14px; font-weight: 500">Sessions</h2>
       {{ range . }}
+      {{ $meta := slice }}
+      {{ with .start }}{{ $meta = $meta | append . }}{{ end }}
+      {{ if .start }}{{ with .room }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
+      {{ with .lang }}{{ $meta = $meta | append . }}{{ end }}
       <a href="{{ .url }}" class="session-link" style="--accent: var(--df-{{ .color }})">
-        <span class="session-link__meta">{{ .start }} · {{ .room }}{{ with .lang }} · {{ . }}{{ end }}</span>
+        {{ with $meta }}<span class="session-link__meta">{{ delimit . " · " }}</span>{{ end }}
         <span class="session-link__title">{{ .title }}</span>
       </a>
       {{ end }}

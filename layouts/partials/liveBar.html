@@ -1,10 +1,8 @@
 {{- /* Static-friendly live features: the script compares the visitor's clock with this schedule
        to drive the live bar and the "Now & next" view on the home page. */ -}}
 {{ $sessions := partial "functions/sessions.html" . }}
-{{ if $sessions }}
 {{ $schedule := slice }}
-{{ range $sessions }}
-  {{ $schedule = $schedule | append (dict
+{{ range $sessions }}{{ if .start }}{{ $schedule = $schedule | append (dict
     "title" .title
     "room" (.room | default "")
     "track" (.track | default "")
@@ -16,8 +14,8 @@
     "speakers" (partial "speakerNames.html" .speakerPages | htmlUnescape)
     "start" (.startTime.Format "2006-01-02T15:04:05Z07:00")
     "end" (.endTime.Format "2006-01-02T15:04:05Z07:00")
-  ) }}
-{{ end }}
+  ) }}{{ end }}{{ end }}
+{{ if $schedule }}
 <a href="{{ "/agenda/" | relURL }}" class="live-bar" data-live-bar hidden>
   <span class="live-bar__label">Live now</span>
   <span class="live-bar__title" data-live-title></span>

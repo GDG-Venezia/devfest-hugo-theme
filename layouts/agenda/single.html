@@ -12,22 +12,29 @@
     </div>
     <h1>{{ .title }}</h1>
 
+    {{ if .start }}
     <div class="grid rules talk__stats">
       <div><div class="mono">Time</div><div class="talk__stat">{{ .start }} — {{ .end }}</div></div>
-      <div><div class="mono">Room</div><div class="talk__stat">{{ .room }}</div></div>
+      {{ with .room }}<div><div class="mono">Room</div><div class="talk__stat">{{ . }}</div></div>{{ end }}
       <div><div class="mono">Duration</div><div class="talk__stat">{{ .minutes }} min</div></div>
     </div>
+    {{ else }}
+    <p class="mono muted">Schedule to be announced</p>
+    {{ end }}
 
     <div class="grid talk__body">
       <div>
         <div class="talk__abstract">{{ .abstract | markdownify }}</div>
+        {{ if .start }}
         <div class="talk__actions">
           <button type="button" class="btn btn--lg" aria-pressed="false" data-save="{{ .id }}">Save</button>
           {{ $dates := printf "%s/%s" (.startTime.UTC.Format "20060102T150405Z") (.endTime.UTC.Format "20060102T150405Z") }}
-          {{ $location := printf "%s, %s" .room site.Params.location.venezia.address }}
+          {{ $loc := site.Params.location.venezia.address }}
+          {{ with .room }}{{ $loc = printf "%s, %s" . $loc }}{{ end }}
           <a class="btn btn--lg" target="_blank" rel="noopener"
-             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ printf "%s — %s" .title site.Title | urlquery }}&dates={{ $dates }}&location={{ $location | urlquery }}">Add to calendar</a>
+             href="https://calendar.google.com/calendar/render?action=TEMPLATE&text={{ printf "%s — %s" .title site.Title | urlquery }}&dates={{ $dates }}&location={{ $loc | urlquery }}">Add to calendar</a>
         </div>
+        {{ end }}
       </div>
       {{ with .speakerPages }}
       <div class="talk__speaker">
