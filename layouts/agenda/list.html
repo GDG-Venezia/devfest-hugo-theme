@@ -27,12 +27,19 @@
 <section>
   <div class="wrap" style="padding-bottom: clamp(40px, 5vw, 72px)">
     {{- /* Timetable: one column per track, one row per start time. A session spans every row until
-           its end, and sessions without a track (check-in, breaks, keynotes) span all columns. */ -}}
+           its end, and sessions without a track (check-in, breaks, keynotes) span all columns.
+           A full-width service row blocks every column, so a session crossing one (e.g. a
+           workshop running through lunch) is capped at that row instead of overlapping it. */ -}}
     {{ $starts := slice }}
     {{ range $scheduled }}{{ if not (in $starts .start) }}{{ $starts = $starts | append .start }}{{ end }}{{ end }}
     {{ $columns := slice }}
     {{ range $data.tracks }}{{ if where $scheduled "track" .name }}{{ $columns = $columns | append . }}{{ end }}{{ end }}
     {{ $lastRow := add (len $starts) 2 }}
+    {{ $serviceRow := dict }}
+    {{ range $scheduled }}{{ if and .service (not .track) }}
+      {{ $session := . }}
+      {{ range $k, $s := $starts }}{{ if eq $s $session.start }}{{ $serviceRow = merge $serviceRow (dict $s (add $k 2)) }}{{ end }}{{ end }}
+    {{ end }}{{ end }}
 
     <aside class="saved-note" data-saved-note hidden aria-live="polite">
       <span class="saved-note__icon" aria-hidden="true">i</span>
@@ -62,6 +69,7 @@
         {{ $end := .end }}
         {{ $endRow := $lastRow }}
         {{ range $k, $next := $starts }}{{ if and (ge $next $end) (eq $endRow $lastRow) }}{{ $endRow = add $k 2 }}{{ end }}{{ end }}
+        {{ range $s, $r := $serviceRow }}{{ if and (gt $s $start) (lt $s $end) }}{{ if lt $r $endRow }}{{ $endRow = $r }}{{ end }}{{ end }}{{ end }}
         {{ $column := 0 }}
         {{ $track := .track }}
         {{ range $i, $c := $columns }}{{ if and $track (eq $c.name $track) }}{{ $column = add $i 2 }}{{ end }}{{ end }}

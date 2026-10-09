@@ -257,7 +257,10 @@ p { margin: 0; }
 .program-stats dt { font-family: var(--df-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); }
 .program-stats dd { margin: 6px 0 0; font-family: var(--df-display); font-weight: 700; font-size: clamp(30px, 3.6vw, 48px); letter-spacing: -0.03em; line-height: 1; color: var(--df-yellow); }
 
-.section--ink .rules > * { background: var(--df-ink); }
+/* Cards in the dark section: literal background, so the ink→paper remap below
+   only inverts accents (card bars, borders, links) — an ink accent would be
+   invisible on ink, e.g. an "ink" track card or a trackless live card. */
+.section--ink .rules > * { background: #101010; --df-ink: var(--df-paper); }
 .track-card { display: flex; flex-direction: column; gap: 12px; padding: 22px; }
 .track-card__name { font-weight: 700; font-size: 24px; letter-spacing: -0.02em; }
 .track-card__meta { font-family: var(--df-mono); font-size: 11px; line-height: 1.7; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255, 255, 255, 0.6); }
@@ -266,7 +269,7 @@ p { margin: 0; }
 .track-card__talks a { color: var(--df-paper); font-size: 15px; line-height: 1.4; }
 .track-card__talks a:hover { color: var(--df-yellow); }
 .track-card__more { margin-top: auto; padding-top: 10px; font-size: 14px; font-weight: 600; color: var(--accent); }
-.track-card__more:hover { color: var(--df-paper); }
+.track-card__more:hover { color: var(--df-yellow); }
 
 .now-next { display: grid; gap: clamp(24px, 3vw, 36px); }
 .now-next__label { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-family: var(--df-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255, 255, 255, 0.7); }
