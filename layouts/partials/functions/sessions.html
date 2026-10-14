@@ -8,8 +8,9 @@
 {{- $out := slice -}}
 {{- if and $data $data.enable $data.sessions -}}
   {{- $tz := $data.timezone | default "Europe/Rome" -}}
-  {{- $colors := dict -}}
-  {{- range $data.tracks }}{{ $colors = merge $colors (dict .name .color) }}{{ end -}}
+  {{- $tracks := dict -}}
+  {{- range $data.tracks }}{{ $tracks = merge $tracks (dict .name .) }}{{ end -}}
+  {{- $svcColor := $data.serviceColor | default "ink" -}}
   {{- $scheduled := slice -}}
   {{- $unscheduled := slice -}}
   {{- range $data.sessions -}}
@@ -17,8 +18,12 @@
     {{- range .speakers }}{{ with site.GetPage (printf "/speakers/%s" .) }}{{ $speakers = $speakers | append . }}{{ end }}{{ end -}}
     {{- $url := "" -}}
     {{- if not .service }}{{ with site.GetPage (printf "/agenda/%s" .id) }}{{ $url = .RelPermalink }}{{ end }}{{ end -}}
+    {{- $fallback := "ink" -}}
+    {{- if .service }}{{ $fallback = $svcColor }}{{ end -}}
+    {{- $track := index $tracks (.track | default "") | default dict -}}
     {{- $s := merge . (dict
-        "color" (index $colors (.track | default "") | default "ink")
+        "color" ($track.color | default $fallback)
+        "dark" ($track.dark | default false)
         "speakerPages" $speakers
         "url" $url
       ) -}}

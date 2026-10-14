@@ -6,7 +6,9 @@
 <section class="section talk">
   <div class="wrap" style="padding-top: clamp(20px, 2.6vw, 36px)">
     <div class="talk__chips">
-      {{ with .track }}<span class="chip chip--fill" style="--accent: var(--df-{{ $session.color }})">{{ . }}</span>{{ end }}
+      {{ with .track }}<span class="chip chip--fill" style="--accent: {{ partial "functions/color.html" $session | safeCSS }}">{{ . }}</span>{{ end }}
+      {{- /* Format only when it says more than "Session" (e.g. Workshop). */ -}}
+      {{ with .format }}{{ if ne (lower .) "session" }}<span class="chip">{{ . }}</span>{{ end }}{{ end }}
       {{ with .level }}<span class="chip">{{ . }}</span>{{ end }}
       {{ with .lang }}<span class="chip">{{ . }}</span>{{ end }}
     </div>

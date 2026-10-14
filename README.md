@@ -108,9 +108,13 @@ a notice when "My agenda" is open, and the first save explains the same in a sho
 enable: true
 date: "2026-10-24"
 timezone: "Europe/Rome"
+serviceColor: "blue"            # colour for service items (keynotes, breaks); default ink
 tracks:
   - name: "Mobile"
-    color: "green"
+    color: "green"                # palette name (blue | red | yellow | green | ink) or any CSS colour
+  - name: "Espresso"
+    color: "#371A19"              # e.g. a room's real signage colour
+    dark: true                    # too dark for the dark sections: they use paper there, like ink
 sessions:
   - id: "kmp-in-production"      # URL: /agenda/kmp-in-production/
     title: "Kotlin Multiplatform in production"
@@ -118,6 +122,7 @@ sessions:
     end: "10:30"
     room: "Aula Alfa"
     track: "Mobile"
+    format: "Session"             # anything but "Session" (e.g. Workshop) shows as a label
     lang: "ENG"
     level: "Intermediate"
     speakers: ["jane-doe"]        # file names in content/speakers/
@@ -133,6 +138,17 @@ sessions:
 scheduled: it still gets a talk page and appears on speaker pages and under "Announced talks" on the
 agenda, but not in the timetable, the live bar or "My agenda", and it has no Save button. Add the
 times when the schedule is ready and it becomes a normal session.
+
+Each track's `color` takes a palette name (`blue`, `red`, `yellow`, `green`, `ink`) or any CSS
+colour, such as a room's real signage hex. On the dark "Program" section a colour that is too dark
+to read there would vanish: set `dark: true` on the track and its track cards and "Now & next"
+cards use paper as accent instead, the same treatment `ink` gets.
+
+`format` is free text ("Session", "Workshop", …). Anything other than "Session" shows as a chip on
+the talk page and as a label on session cards; `format: "Workshop"` (or a track whose name contains
+"Workshop") also feeds the homepage's Workshops stat. `serviceColor` colours the service items —
+keynotes, breaks and lunch, which have no track of their own. It takes the same values as a track
+colour and defaults to `ink`.
 
 ## Speakers (`content/speakers/<slug>.md`)
 

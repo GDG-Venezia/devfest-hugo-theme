@@ -1,0 +1,21 @@
+{{- /*
+  Resolves a track colour to a CSS value for the `--accent` custom property.
+  Pass a track or enriched session map, or a dict with:
+    "color"  — a palette name (blue, red, yellow, green, ink) or any CSS colour,
+               e.g. a room's real signage colour like "#3D703A". Default "ink".
+    "dark"   — optional: true when the colour is too dark to see on the dark
+               "ink" sections (set `dark: true` on the track in sessions.yml).
+    "onDark" — optional context flag: set it when styling something that sits
+               on a dark section; a dark-flagged colour becomes paper there,
+               the same treatment the stylesheet gives ink.
+*/ -}}
+{{- $c := print (.color | default "ink") -}}
+{{- /* safeCSS: the value is author-controlled data and must land in style attributes verbatim
+       (a plain string from a partial would be escaped to ZgotmplZ there). */ -}}
+{{- if and .onDark .dark -}}
+  {{- print "var(--df-paper)" | safeCSS -}}
+{{- else if in (slice "blue" "red" "yellow" "green" "ink") $c -}}
+  {{- printf "var(--df-%s)" $c | safeCSS -}}
+{{- else -}}
+  {{- $c | safeCSS -}}
+{{- end -}}

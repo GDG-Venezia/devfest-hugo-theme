@@ -45,7 +45,7 @@
         {{ with .lang }}{{ if not (in $trackLangs .) }}{{ $trackLangs = $trackLangs | append . }}{{ end }}{{ end }}
         {{ with .room }}{{ if not (in $rooms .) }}{{ $rooms = $rooms | append . }}{{ end }}{{ end }}
       {{ end }}
-      <article class="track-card" style="--accent: var(--df-{{ .color }})">
+      <article class="track-card" style="--accent: {{ partial "functions/color.html" (dict "color" .color "dark" .dark "onDark" true) | safeCSS }}">
         <span class="bar"></span>
         <h3 class="track-card__name">{{ .name }}</h3>
         <p class="track-card__meta">

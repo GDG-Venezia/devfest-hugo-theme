@@ -1,6 +1,6 @@
 {{- /* A session from functions/sessions.html. Scheduled sessions have start and end;
        announced ones (schedule not out yet) show no times and no Save button. */ -}}
-<article class="session-card{{ if .service }} session-card--service{{ end }}" style="--accent: var(--df-{{ .color }})" data-session data-track="{{ .track }}" data-id="{{ .id }}"{{ if .service }} data-service{{ end }}>
+<article class="session-card{{ if .service }} session-card--service{{ end }}" style="--accent: {{ partial "functions/color.html" . | safeCSS }}" data-session data-track="{{ .track }}" data-id="{{ .id }}"{{ if .service }} data-service{{ end }}>
   {{ if or .start .lang }}
   <div class="session-card__meta">
     {{ with .start }}<span class="mono">{{ . }} — {{ $.end }}</span>{{ end }}
@@ -13,7 +13,7 @@
   {{ if not .service }}
   {{ if or .track .start }}
   <div class="session-card__foot">
-    <span class="session-card__track">{{ .track }}{{ with .room }} · {{ . }}{{ end }}</span>
+    <span class="session-card__track">{{ .track }}{{ with .format }}{{ if ne (lower .) "session" }} · {{ . }}{{ end }}{{ end }}{{ with .room }} · {{ . }}{{ end }}</span>
     {{ if .start }}<button type="button" class="btn btn--sm" aria-pressed="false" data-save="{{ .id }}">Save</button>{{ end }}
   </div>
   {{ end }}

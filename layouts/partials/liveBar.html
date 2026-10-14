@@ -1,12 +1,14 @@
 {{- /* Static-friendly live features: the script compares the visitor's clock with this schedule
-       to drive the live bar and the "Now & next" view on the home page. */ -}}
+       to drive the live bar and the "Now & next" view on the home page. "color" is resolved to a
+       CSS value here: site.js sets it as --accent directly, and the cards it builds only ever
+       render on the dark home section. */ -}}
 {{ $sessions := partial "functions/sessions.html" . }}
 {{ $schedule := slice }}
 {{ range $sessions }}{{ if .start }}{{ $schedule = $schedule | append (dict
     "title" .title
     "room" (.room | default "")
     "track" (.track | default "")
-    "color" .color
+    "color" (partial "functions/color.html" (dict "color" .color "dark" .dark "onDark" true))
     "url" .url
     "service" (.service | default false)
     "time" .start

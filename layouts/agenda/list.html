@@ -56,7 +56,7 @@
       {{ range $i, $column := $columns }}
       {{ $rooms := slice }}
       {{ range where $scheduled "track" $column.name }}{{ with .room }}{{ if not (in $rooms .) }}{{ $rooms = $rooms | append . }}{{ end }}{{ end }}{{ end }}
-      <div class="agenda-grid__head" style="grid-column: {{ add $i 2 }}; --accent: var(--df-{{ $column.color }})">
+      <div class="agenda-grid__head" style="grid-column: {{ add $i 2 }}; --accent: {{ partial "functions/color.html" $column | safeCSS }}">
         <strong>{{ $column.name }}</strong>
         {{ with $rooms }}<span class="mono">{{ delimit . ", " }}</span>{{ end }}
       </div>

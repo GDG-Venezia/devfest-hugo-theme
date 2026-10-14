@@ -18,7 +18,7 @@
       </div>
     </div>
     <div>
-      {{ with index $sessions 0 }}<span class="mono" style="color: var(--df-{{ .color }})">{{ .track }}</span>{{ end }}
+      {{ with index $sessions 0 }}<span class="mono" style="color: {{ partial "functions/color.html" . | safeCSS }}">{{ .track }}</span>{{ end }}
       <h1>{{ .Params.name | default .Title }}</h1>
       {{ with .Params.role | default .Params.jobTitle }}<div class="speaker-detail__role">{{ . }}</div>{{ end }}
       <div class="speaker-detail__bio">{{ with .Content }}{{ . }}{{ else }}{{ .Params.bio | markdownify }}{{ end }}</div>
@@ -29,7 +29,7 @@
       {{ with .start }}{{ $meta = $meta | append . }}{{ end }}
       {{ if .start }}{{ with .room }}{{ $meta = $meta | append . }}{{ end }}{{ end }}
       {{ with .lang }}{{ $meta = $meta | append . }}{{ end }}
-      <a href="{{ .url }}" class="session-link" style="--accent: var(--df-{{ .color }})">
+      <a href="{{ .url }}" class="session-link" style="--accent: {{ partial "functions/color.html" . | safeCSS }}">
         {{ with $meta }}<span class="session-link__meta">{{ delimit . " · " }}</span>{{ end }}
         <span class="session-link__title">{{ .title }}</span>
       </a>

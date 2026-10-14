@@ -188,7 +188,8 @@ function sessionCard(session) {
   const card = document.createElement(session.url ? "a" : "div");
   card.className = "live-card";
   if (session.url) card.href = session.url;
-  card.style.setProperty("--accent", `var(--df-${session.color || "ink"})`);
+  // "color" arrives as a resolved CSS value: a palette var or a raw colour.
+  card.style.setProperty("--accent", session.color || "var(--df-ink)");
 
   const meta = document.createElement("span");
   meta.className = "live-card__meta";
