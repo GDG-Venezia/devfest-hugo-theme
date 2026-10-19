@@ -1,0 +1,13 @@
+{{ with site.Data.maps }}{{ if .enable }}
+<h3 class="subhead" id="maps">{{ .title | default "Venue maps" }}</h3>
+{{ with .hint }}<p class="mono map-hint">{{ . }}</p>{{ end }}
+<div class="grid rules map-grid" style="--min: 210px">
+  {{ range .maps }}
+  {{- $src := .image | relURL }}
+  <a class="map-card" href="{{ $src }}" data-map-card data-map-title="{{ .title }}" data-map-alt="{{ .alt }}" data-map-src="{{ $src }}" target="_blank" rel="noopener">
+    <span class="map-card__frame"><img src="{{ (.thumb | default .image) | relURL }}" alt="{{ .alt }}" loading="lazy"{{ with .width }} width="{{ . }}"{{ end }}{{ with .height }} height="{{ . }}"{{ end }}></span>
+    <span class="map-card__label"><span class="map-card__title">{{ .title }}</span>{{ with .text }}<span class="map-card__text">{{ . }}</span>{{ end }}</span>
+  </a>
+  {{ end }}
+</div>
+{{ end }}{{ end }}

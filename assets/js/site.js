@@ -283,7 +283,201 @@ function initSpeakerShuffle() {
   grid.setAttribute("data-shuffled", "");
 }
 
+// Venue maps: tapping a map card opens a fullscreen viewer with pinch-zoom and pan.
+// Without JavaScript (or <dialog> support) the cards stay plain links to the image.
+function initMapViewer() {
+  const cards = document.querySelectorAll("[data-map-card]");
+  if (!cards.length || typeof document.createElement("dialog").showModal !== "function") return;
+
+  const viewer = document.createElement("dialog");
+  viewer.className = "map-viewer";
+  viewer.setAttribute("aria-label", "Map viewer");
+  viewer.innerHTML =
+    '<div class="map-viewer__bar">' +
+    '<div class="map-viewer__title" data-map-title></div>' +
+    '<button class="map-viewer__close" type="button">Close</button>' +
+    "</div>" +
+    '<div class="map-viewer__stage" data-map-stage><img alt="" draggable="false"></div>' +
+    '<div class="map-viewer__hint" data-map-hint hidden>Pinch or scroll to zoom — double-tap resets</div>';
+  document.body.append(viewer);
+
+  const stage = viewer.querySelector("[data-map-stage]");
+  const img = stage.querySelector("img");
+  const title = viewer.querySelector("[data-map-title]");
+  const hint = viewer.querySelector("[data-map-hint]");
+  const MIN = 1, MAX = 6, TAP_SCALE = 2.5;
+
+  let scale = MIN, x = 0, y = 0, baseW = 0, baseH = 0;
+  const pointers = new Map();
+  let lastX = 0, lastY = 0, lastDist = 0, lastMidX = 0, lastMidY = 0;
+  let downX = 0, downY = 0, movedFar = false, lastTap = 0, lastZoomAt = 0;
+  let wheelTimer = 0, hintTimer = 0;
+
+  const apply = () => {
+    img.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+    stage.style.cursor = scale > MIN ? "grab" : "zoom-in";
+  };
+
+  const clamp = () => {
+    const maxX = Math.max(0, (baseW * scale - stage.clientWidth) / 2);
+    const maxY = Math.max(0, (baseH * scale - stage.clientHeight) / 2);
+    x = Math.min(maxX, Math.max(-maxX, x));
+    y = Math.min(maxY, Math.max(-maxY, y));
+  };
+
+  // The image sits centered in the stage; measure its fitted size with no transform.
+  const measure = () => {
+    img.style.transform = "none";
+    const rect = img.getBoundingClientRect();
+    baseW = rect.width;
+    baseH = rect.height;
+    clamp();
+    apply();
+  };
+
+  // Zoom by `factor`, keeping the point (px, py) on the image fixed.
+  const zoomAt = (px, py, factor) => {
+    const next = Math.min(MAX, Math.max(MIN, scale * factor));
+    if (next === scale) return;
+    const r = stage.getBoundingClientRect();
+    const ix = (px - r.left - r.width / 2 - x) / scale;
+    const iy = (py - r.top - r.height / 2 - y) / scale;
+    scale = next;
+    x = px - r.left - r.width / 2 - ix * scale;
+    y = py - r.top - r.height / 2 - iy * scale;
+    clamp();
+    apply();
+  };
+
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    stage.setPointerCapture(e.pointerId);
+    pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.size === 1) {
+      downX = lastX = e.clientX;
+      downY = lastY = e.clientY;
+      movedFar = false;
+    } else if (pointers.size === 2) {
+      const [a, b] = pointers.values();
+      lastDist = Math.hypot(a.x - b.x, a.y - b.y);
+      lastMidX = (a.x + b.x) / 2;
+      lastMidY = (a.y + b.y) / 2;
+    }
+    stage.classList.add("dragging");
+  });
+
+  stage.addEventListener("pointermove", (e) => {
+    const p = pointers.get(e.pointerId);
+    if (!p) return;
+    p.x = e.clientX;
+    p.y = e.clientY;
+    if (pointers.size === 1) {
+      x += e.clientX - lastX;
+      y += e.clientY - lastY;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    } else if (pointers.size >= 2) {
+      const [a, b] = pointers.values();
+      const dist = Math.hypot(a.x - b.x, a.y - b.y);
+      const midX = (a.x + b.x) / 2;
+      const midY = (a.y + b.y) / 2;
+      if (lastDist > 0) zoomAt(midX, midY, dist / lastDist);
+      x += midX - lastMidX;
+      y += midY - lastMidY;
+      lastDist = dist;
+      lastMidX = midX;
+      lastMidY = midY;
+    }
+    if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) movedFar = true;
+    clamp();
+    apply();
+  });
+
+  const release = (e) => {
+    if (!pointers.delete(e.pointerId)) return;
+    if (pointers.size === 1) {
+      const [only] = pointers.values();
+      lastX = only.x;
+      lastY = only.y;
+    } else if (pointers.size === 0) {
+      stage.classList.remove("dragging");
+      if (e.type !== "pointerup" || movedFar) return;
+      if (scale <= MIN) {
+        // Tap on the empty area around the image closes; a tap on the image does not.
+        const r = img.getBoundingClientRect();
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) {
+          viewer.close();
+          return;
+        }
+      }
+      if (e.pointerType !== "mouse") {
+        const now = performance.now();
+        if (now - lastTap < 300) {
+          lastTap = 0;
+          lastZoomAt = now;
+          zoomAt(e.clientX, e.clientY, scale > MIN + 0.01 ? MIN / scale : TAP_SCALE);
+        } else {
+          lastTap = now;
+        }
+      }
+    }
+  };
+  stage.addEventListener("pointerup", release);
+  stage.addEventListener("pointercancel", release);
+
+  stage.addEventListener("dblclick", (e) => {
+    const now = performance.now();
+    if (now - lastZoomAt < 300) return; // already handled as a touch double-tap
+    lastZoomAt = now;
+    zoomAt(e.clientX, e.clientY, scale > MIN + 0.01 ? MIN / scale : TAP_SCALE);
+  });
+
+  stage.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    stage.classList.add("dragging");
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.2 : 1 / 1.2);
+    clearTimeout(wheelTimer);
+    wheelTimer = setTimeout(() => stage.classList.remove("dragging"), 150);
+  }, { passive: false });
+
+  stage.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  img.addEventListener("load", () => { if (viewer.open) measure(); });
+  window.addEventListener("resize", () => { if (viewer.open) measure(); });
+
+  viewer.querySelector(".map-viewer__close").addEventListener("click", () => viewer.close());
+
+  viewer.addEventListener("close", () => {
+    scale = MIN;
+    x = 0;
+    y = 0;
+    apply();
+    hint.hidden = true;
+    clearTimeout(hintTimer);
+  });
+
+  cards.forEach((card) => {
+    card.addEventListener("click", (e) => {
+      e.preventDefault();
+      const src = card.dataset.mapSrc;
+      title.textContent = card.dataset.mapTitle || "";
+      img.alt = card.dataset.mapAlt || "";
+      if (img.getAttribute("src") !== src) img.src = src;
+      scale = MIN;
+      x = 0;
+      y = 0;
+      apply();
+      viewer.showModal();
+      if (img.complete && img.naturalWidth) measure();
+      hint.hidden = false;
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(() => { hint.hidden = true; }, 3500);
+    });
+  });
+}
+
 initMenu();
 initAgenda();
 initLive();
 initSpeakerShuffle();
+initMapViewer();

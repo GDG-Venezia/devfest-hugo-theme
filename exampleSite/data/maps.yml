@@ -1,0 +1,21 @@
+---
+# Venue maps under "Getting there" on the home page. A card opens a fullscreen viewer
+# with pinch-zoom and pan; without JavaScript the image itself opens in a new tab.
+# `thumb` is the small image shown in the card (falls back to `image`); `width`/`height`
+# are the full image's intrinsic size, used to reserve space for the card image.
+enable: true
+title: "Venue maps"
+hint: "Tap a map to open it fullscreen and pinch to zoom."
+maps:
+  - title: "Campus"
+    text: "How the campus is laid out."
+    image: "images/maps/campus.webp"
+    thumb: "images/maps/campus-thumb.webp"
+    alt: "Map of the campus"
+    width: 880
+    height: 992
+  - title: "Alfa · Ground floor"
+    image: "images/maps/alfa-ground.webp"
+    alt: "Alfa building, ground floor map"
+    width: 880
+    height: 992
