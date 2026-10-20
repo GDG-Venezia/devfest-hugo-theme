@@ -476,7 +476,119 @@ function initMapViewer() {
   });
 }
 
+// Offline mode (params.offline.enable): a service worker saves the site on this device.
+// Banners say when the site is ready offline, and when a page is a saved copy.
+const OFFLINE_READY_KEY = "devfest:offline-ready-seen";
+
+function netBanner() {
+  let banner = document.querySelector("[data-net-banner]");
+  if (!banner) {
+    banner = document.createElement("div");
+    banner.className = "net-banner";
+    banner.setAttribute("data-net-banner", "");
+    banner.setAttribute("role", "status");
+    banner.innerHTML =
+      '<div class="wrap net-banner__inner">' +
+      '<span class="net-banner__dot" aria-hidden="true"></span>' +
+      '<span class="net-banner__text"><strong data-net-title></strong> <span data-net-text></span></span>' +
+      '<span class="net-banner__actions"><button type="button" class="btn btn--sm" data-net-action hidden></button>' +
+      '<button type="button" class="net-banner__close" data-net-close aria-label="Dismiss">×</button></span>' +
+      "</div>";
+    banner.hidden = true;
+    const header = document.querySelector(".site-header");
+    if (header) header.after(banner);
+    else document.body.prepend(banner);
+    banner.querySelector("[data-net-close]").addEventListener("click", () => {
+      banner.hidden = true;
+      banner.dataset.dismissed = banner.dataset.state;
+    });
+  }
+  return banner;
+}
+
+function showNetBanner(state, title, text, action) {
+  const banner = netBanner();
+  if (banner.dataset.dismissed === state) return;
+  delete banner.dataset.dismissed;
+  banner.dataset.state = state;
+  banner.querySelector("[data-net-title]").textContent = title;
+  banner.querySelector("[data-net-text]").textContent = text;
+  const button = banner.querySelector("[data-net-action]");
+  button.hidden = !action;
+  if (action) {
+    button.textContent = action.label;
+    button.onclick = action.run;
+  }
+  banner.hidden = false;
+}
+
+function hideNetBanner(...states) {
+  const banner = document.querySelector("[data-net-banner]");
+  if (banner && states.includes(banner.dataset.state)) banner.hidden = true;
+}
+
+function savedAtLabel(value) {
+  const date = value ? new Date(value) : null;
+  if (!date || Number.isNaN(date.getTime())) return "";
+  const sameDay = date.toDateString() === new Date().toDateString();
+  const time = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return sameDay ? `today at ${time}` : `${date.toLocaleDateString([], { day: "numeric", month: "short" })}, ${time}`;
+}
+
+function initOffline() {
+  const swMeta = document.querySelector('meta[name="df-service-worker"]');
+  if (!swMeta || !("serviceWorker" in navigator)) return;
+
+  // Saved copy served by the service worker (offline, or the network was too slow).
+  const saved = document.querySelector('meta[name="df-saved-copy"]');
+  const savedAt = savedAtLabel(saved?.dataset.savedAt);
+  const reload = { label: "Reload", run: () => location.reload() };
+
+  const showOffline = () => showNetBanner(
+    "offline",
+    "You're offline.",
+    `Showing the version saved on this device${savedAt ? ` (${savedAt})` : ""}. Agenda, speakers and maps still work.`,
+  );
+
+  if (saved?.content === "slow") {
+    showNetBanner("slow", "Slow connection.", `Showing the version saved on this device${savedAt ? ` (${savedAt})` : ""} while the latest loads.`);
+  } else if (saved || !navigator.onLine) {
+    showOffline();
+  }
+
+  window.addEventListener("offline", showOffline);
+  window.addEventListener("online", () => {
+    hideNetBanner("offline");
+    if (saved) showNetBanner("online", "Back online.", "Reload to get the latest version of this page.", reload);
+  });
+
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data?.type === "devfest:page-updated" && saved) {
+      showNetBanner("updated", "Latest version ready.", "Reload to see it.", reload);
+    }
+  });
+
+  const firstInstall = !navigator.serviceWorker.controller;
+  const register = () => {
+    navigator.serviceWorker.register(swMeta.content).then(() => navigator.serviceWorker.ready).then((registration) => {
+      // Images are saved after the pages, in the background, unless the visitor asked to save data.
+      if (!navigator.connection?.saveData) registration.active?.postMessage({ type: "devfest:save-media" });
+      if (firstInstall && !localStorage.getItem(OFFLINE_READY_KEY)) {
+        try { localStorage.setItem(OFFLINE_READY_KEY, "1"); } catch { /* banner may show again */ }
+        showNetBanner(
+          "ready",
+          "Works offline.",
+          "This site is now saved on this device: agenda, speakers and venue maps open even without a connection.",
+        );
+      }
+    }).catch(() => {});
+  };
+  if (document.readyState === "complete") register();
+  else window.addEventListener("load", register, { once: true });
+}
+
 initMenu();
+initOffline();
 initAgenda();
 initLive();
 initSpeakerShuffle();

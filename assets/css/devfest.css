@@ -187,6 +187,26 @@ p { margin: 0; }
 .live-bar__more { margin-left: auto; font-size: 13px; opacity: 0.85; }
 @keyframes df-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
+/* Offline mode banner (site.js): ready offline, offline, slow connection, back online */
+.net-banner { --accent: var(--df-yellow); background: var(--accent); color: var(--df-ink); border-bottom: 1px solid var(--df-ink); }
+.net-banner[data-state="ready"] { --accent: var(--df-green); }
+.net-banner[data-state="online"], .net-banner[data-state="updated"] { --accent: var(--df-blue); }
+/* Ink text on every state: white on the green/blue accents is under 4.5:1 at 14px. */
+.net-banner :focus-visible { outline-color: currentColor; }
+.net-banner__inner { display: flex; align-items: center; gap: 12px; padding-block: 10px; }
+.net-banner__dot { flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+.net-banner[data-state="offline"] .net-banner__dot { background: transparent; border: 2px solid currentColor; }
+.net-banner__text { flex: 1; font-size: 14px; line-height: 1.45; }
+.net-banner__text strong { font-weight: 600; }
+.net-banner__actions { display: flex; align-items: center; gap: 6px; }
+.net-banner .btn { border-color: currentColor; color: inherit; }
+.net-banner .btn:hover { background: var(--df-ink); color: var(--df-paper); border-color: var(--df-ink); }
+.net-banner__close {
+  display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%;
+  background: transparent; color: inherit; font-size: 22px; line-height: 1; cursor: pointer;
+}
+.net-banner__close:hover { background: rgba(16, 16, 16, 0.12); }
+
 /* Hero */
 .hero > .wrap {
   padding-top: clamp(36px, 5vw, 72px);

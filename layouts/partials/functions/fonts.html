@@ -1,0 +1,23 @@
+{{- /* Self-hosted webfonts (assets/fonts, SIL OFL: see assets/fonts/licenses). Returns
+       [{family, weight, subset, preload, resource}]. Subsets and unicode ranges match Google Fonts. */ -}}
+{{- $fonts := slice
+  (dict "family" "Space Grotesk" "weight" "500 700" "file" "space-grotesk" "preload" true)
+  (dict "family" "IBM Plex Sans" "weight" "400 600" "file" "ibm-plex-sans" "preload" true)
+  (dict "family" "IBM Plex Mono" "weight" "400" "file" "ibm-plex-mono-400")
+  (dict "family" "IBM Plex Mono" "weight" "500" "file" "ibm-plex-mono-500")
+-}}
+{{- $ranges := dict
+  "latin" "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+  "latin-ext" "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF"
+-}}
+{{- $out := slice -}}
+{{- range $fonts -}}
+  {{- $font := . -}}
+  {{- range $subset := slice "latin-ext" "latin" -}}
+    {{- $res := resources.Get (printf "fonts/%s-%s.woff2" $font.file $subset) | resources.Fingerprint -}}
+    {{- $out = $out | append (dict
+      "family" $font.family "weight" $font.weight "range" (index $ranges $subset)
+      "preload" (and $font.preload (eq $subset "latin")) "url" $res.RelPermalink) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

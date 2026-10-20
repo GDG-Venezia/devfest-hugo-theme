@@ -1,0 +1,17 @@
+{{- /* Web app manifest, only linked when offline mode is on (layouts/partials/head.html). */ -}}
+{{- $offline := site.Params.offline -}}
+{
+  "name": {{ site.Title | jsonify }},
+  "short_name": {{ $offline.shortName | default site.Title | jsonify }},
+  "description": {{ site.Params.description | default site.Title | jsonify }},
+  "start_url": {{ "/" | relURL | jsonify }},
+  "scope": {{ "/" | relURL | jsonify }},
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#101010",
+  "icons": [
+    {{- $icon := $offline.icon | default "images/favicon.png" }}
+    {{- $type := index (dict ".svg" "image/svg+xml" ".webp" "image/webp" ".jpg" "image/jpeg" ".jpeg" "image/jpeg") (path.Ext $icon | lower) | default "image/png" }}
+    { "src": {{ $icon | relURL | jsonify }}, "sizes": {{ $offline.iconSize | default "512x512" | jsonify }}, "type": {{ $type | jsonify }}, "purpose": "any" }
+  ]
+}

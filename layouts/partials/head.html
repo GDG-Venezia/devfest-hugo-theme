@@ -13,13 +13,22 @@
     {{ template "_internal/twitter_cards.html" . }}
 
     {{hugo.Generator}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    {{- /* Fonts are self-hosted: no third-party request, and they keep working offline. */ -}}
+    {{ $fonts := partial "functions/fonts.html" . }}
+    {{ range where $fonts "preload" true }}<link rel="preload" href="{{ .url }}" as="font" type="font/woff2" crossorigin>
+    {{ end -}}
+    <style>{{ range $fonts }}@font-face{font-family:'{{ .family }}';font-style:normal;font-weight:{{ .weight }};font-display:swap;src:url({{ .url }}) format('woff2');unicode-range:{{ .range }}}{{ end }}</style>
     {{ $style := resources.Get "css/devfest.css" | resources.Minify | resources.Fingerprint }}
     <link href="{{ $style.RelPermalink }}" rel="stylesheet" integrity="{{ $style.Data.Integrity }}" />
     {{ $script := resources.Get "js/site.js" | js.Build (dict "minify" true) | resources.Fingerprint }}
     <script src="{{ $script.RelPermalink }}" defer></script>
 
     <link rel="icon" href="{{ "images/favicon.png" | relURL }}" type="image/png" />
+    {{- with partial "functions/serviceWorker.html" . }}
+    {{- /* Offline mode: site.js registers this service worker. */}}
+    <meta name="df-service-worker" content="{{ . }}">
+    {{- $manifest := resources.Get "manifest.json" | resources.ExecuteAsTemplate "manifest.webmanifest" site.Home }}
+    <link rel="manifest" href="{{ $manifest.RelPermalink }}">
+    <link rel="apple-touch-icon" href="{{ site.Params.offline.icon | default "images/favicon.png" | relURL }}">
+    {{- end }}
   </head>

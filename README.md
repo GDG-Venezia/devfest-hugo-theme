@@ -67,7 +67,24 @@ weight = 3
   address = "Campus Scientifico Università Ca' Foscari"
   desc = "Via Torino, 155 Mestre, Venezia VE, 30170"
   mapsLink = "https://www.google.com/maps/dir//…"
+  [params.offline]                     # optional: offline mode
+  enable = true
+  shortName = "DevFest 26"             # home-screen name; default: site title
+  icon = "images/app-icon-512.png"     # app icon (PNG, SVG, WebP or JPEG); default: images/favicon.png
+  iconSize = "512x512"
 ```
+
+### Offline mode (`params.offline`)
+
+With `enable = true` the production build adds a service worker (`/sw.js`) and a web app manifest.
+After the first visit every page, the CSS, JS and fonts are saved on the device; the images those
+pages use follow in the background (skipped when the visitor has asked to save data). Pages load
+from the network first and fall back to the saved copy when offline or after 3.5 s; a banner says
+when the site is ready offline and when a page is a saved copy. Each deploy replaces the saved
+pages and re-checks saved images. It is off under `hugo server`.
+
+Fonts (Space Grotesk, IBM Plex Sans/Mono, SIL OFL) are self-hosted from `assets/fonts` in every
+build, offline mode or not.
 
 ## Data files (`data/`)
 

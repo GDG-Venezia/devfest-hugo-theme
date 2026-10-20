@@ -1,0 +1,8 @@
+{{- /* Builds /sw.js from assets/js/sw.js when params.offline.enable is true. Returns its URL or "".
+       Off under `hugo server`, so local previews never get stuck on saved pages. */ -}}
+{{- $url := "" -}}
+{{- with site.Params.offline }}{{ if and .enable (not hugo.IsServer) -}}
+  {{- $sw := resources.Get "js/sw.js" | resources.ExecuteAsTemplate "js/sw.src.js" site.Home | js.Build (dict "minify" true "targetPath" "sw.js") -}}
+  {{- $url = $sw.RelPermalink -}}
+{{- end }}{{ end -}}
+{{- return $url -}}

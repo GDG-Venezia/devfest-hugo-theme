@@ -36,6 +36,13 @@ weight = 5
   copyright = "© {year} GDG Venezia"             # {year} becomes the current year; HTML allowed
   footerDescription = "Organized by <a href=\"https://gdg.community.dev/gdg-venezia/\" target=\"_blank\">Google Developer Group Venezia</a>."
 
+  # Optional offline mode: a service worker saves the site on the visitor's device (production builds only).
+  [params.offline]
+  enable = true
+  shortName = "DevFest 27"                       # home-screen name; default: site title
+  icon = "images/logo.svg"                       # app icon; default: images/favicon.png
+  iconSize = "any"
+
   [params.location.venezia]
   address = "Campus Scientifico Università Ca' Foscari"
   desc = "Via Torino, 155 Mestre, Venezia VE, 30170"
